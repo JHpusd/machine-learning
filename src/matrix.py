@@ -10,14 +10,16 @@ class Matrix():
         result = [[0, 0], [0, 0]]
         for i in range(len(self.elements)):
             for j in range(len(self.elements[0])):
-                result[i][j] = self.elements[i][j] + input_matrix.elements[i][j]
+                result[i][j] = (
+                    self.elements[i][j] + input_matrix.elements[i][j])
         return Matrix(result)
 
     def subtract(self, input_matrix):
         result = [[0, 0], [0, 0]]
         for i in range(len(self.elements)):
             for j in range(len(self.elements[0])):
-                result[i][j] = self.elements[i][j] - input_matrix.elements[i][j]
+                result[i][j] = (
+                    self.elements[i][j] - input_matrix.elements[i][j])
         return Matrix(result)
 
     def scalar_multiply(self, input_scalar):
