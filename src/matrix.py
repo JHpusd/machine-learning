@@ -60,7 +60,7 @@ class Matrix():
             return True
         else:
             return False
-    
+
     def round(self, decimal_places):
         for i in self.elements:
             for j in range(len(i)):
