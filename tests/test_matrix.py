@@ -63,5 +63,4 @@ assert E.elements == [[38, 2, 47, 4, 56], [2, 20, 6, 28, 10], [
         56, 10, 77, 20, 98]]
 
 assert (E.is_equal(B), E.is_equal(C)) == (True, False)
-
 print("ALL PASSED")
