@@ -66,3 +66,24 @@ class Matrix():
             for j in range(len(i)):
                 i[j] = round(i[j], 5)
         return Matrix(self.elements)
+    
+    def get_pivot_row(self, column_index):
+        for i in range(self.num_rows):
+            if self.elements[i][column_index] != 0:
+                print(i)
+                return i
+    
+    def swap_rows(self, row_index_1, row_index_2):
+        replacement = self.elements[row_index_1]
+        self.elements[row_index_1] = self.elements[row_index_2]
+        self.elements[row_index_2] = replacement
+    
+    def normalize_row(self, row_index):
+        return none
+    
+    def clear_below(self, row_index):
+        return none
+    
+    def clear_above(self, row_index):
+        return none
+    

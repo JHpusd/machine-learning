@@ -1,7 +1,7 @@
 import sys
 sys.path.append('src')
 from matrix import Matrix
-
+'''
 A = Matrix([[1, 3], [2, 4]])
 B = A.copy()
 A = "reset to string"
@@ -64,3 +64,7 @@ assert E.elements == [[38, 2, 47, 4, 56], [2, 20, 6, 28, 10], [
 
 assert (E.is_equal(B), E.is_equal(C)) == (True, False)
 print("ALL PASSED")
+'''
+A = Matrix([[0, 1, 2], [3, 6, 9], [2, 6, 8]])
+A.swap_rows(1, 2)
+print(A.elements)
