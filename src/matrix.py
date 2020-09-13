@@ -66,24 +66,50 @@ class Matrix():
             for j in range(len(i)):
                 i[j] = round(i[j], 5)
         return Matrix(self.elements)
-    
+
     def get_pivot_row(self, column_index):
         for i in range(self.num_rows):
-            if self.elements[i][column_index] != 0:
-                print(i)
-                return i
-    
+            if column_index == 0:
+                if self.elements[i][column_index] != 0:
+                    return i
+            if column_index > 0:
+                ref_num = 0
+                for j in self.elements[i][:column_index]:
+                    ref_num += j
+                if ref_num == 0:
+                    return i
+
     def swap_rows(self, row_index_1, row_index_2):
         replacement = self.elements[row_index_1]
         self.elements[row_index_1] = self.elements[row_index_2]
         self.elements[row_index_2] = replacement
-    
+
     def normalize_row(self, row_index):
-        return none
-    
+        for j in self.elements[row_index]:
+            if j != 0:
+                initial_entry = j
+                break
+        for j in range(self.num_cols):
+            self.elements[row_index][j] /= initial_entry
+
     def clear_below(self, row_index):
-        return none
-    
+        for num in self.elements[row_index]:
+            if num != 0:
+                j = num
+                ref_index = self.elements[row_index].index(j)
+                break
+        for row in self.elements[row_index + 1:]:
+            while row[ref_index] != 0:
+                for n in range(self.num_cols):
+                    row[n] -= self.elements[row_index][n]
+
     def clear_above(self, row_index):
-        return none
-    
+        for num in self.elements[row_index]:
+            if num != 0:
+                j = num
+                ref_index = self.elements[row_index].index(j)
+                break
+        for row in self.elements[:row_index]:
+            while row[ref_index] != 0:
+                for n in range(self.num_cols):
+                    row[n] -= self.elements[row_index][n]
