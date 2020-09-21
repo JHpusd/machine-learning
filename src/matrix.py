@@ -110,7 +110,7 @@ class Matrix():
                 col_index = clone_matrix.elements[row_index].index(j)
                 break
         for row in clone_matrix.elements[row_index + 1:]:
-            while row[col_index] != 0:
+            if row[col_index] != 0:
                 ref_num = row[col_index]
                 for n in range(len(clone_matrix.elements[0])):
                     row[n] -= clone_matrix.elements[row_index][n]*ref_num
@@ -124,7 +124,7 @@ class Matrix():
                 col_index = clone_matrix.elements[row_index].index(j)
                 break
         for row in clone_matrix.elements[:row_index]:
-            while row[col_index] != 0:
+            if row[col_index] != 0:
                 ref_num = row[col_index]
                 for n in range(len(clone_matrix.elements[0])):
                     row[n] -= clone_matrix.elements[row_index][n]*ref_num
