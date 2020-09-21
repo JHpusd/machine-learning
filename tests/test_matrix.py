@@ -68,40 +68,49 @@ print("Testing method 'get_pivot_row(0)'...")
 assert A.get_pivot_row(0) == 1
 print("PASSED")
 print("Testing method 'swap_rows(0, 1)'...")
-A.swap_rows(0, 1)
+A = A.swap_rows(0, 1)
 assert A.elements == [[3, 6, 9], [0, 1, 2], [2, 6, 8]]
 print("PASSED")
 print("Testing method 'normalize_row(0)'...")
-A.normalize_row(0)
+A = A.normalize_row(0)
 assert A.elements == [[1, 2, 3], [0, 1, 2], [2, 6, 8]]
 print("PASSED")
 print("Testing method 'clear_below(0)'...")
-A.clear_below(0)
+A = A.clear_below(0)
 assert A.elements == [[1, 2, 3], [0, 1, 2], [0, 2, 2]]
 print("PASSED")
 print("Testing method 'get_pivot_row(1)'...")
 assert A.get_pivot_row(1) == 1
 print("PASSED")
 print("Testing method 'normalize_row(1)'...")
-A.normalize_row(1)
+A = A.normalize_row(1)
 assert A.elements == [[1, 2, 3], [0, 1, 2], [0, 2, 2]]
 print("PASSED")
 print("Testing method 'clear_below(1)'...")
-A.clear_below(1)
+A = A.clear_below(1)
 assert A.elements == [[1, 2, 3], [0, 1, 2], [0, 0, -2]]
 print("PASSED")
 print("Testing method 'get_pivot_row(2)'...")
 assert A.get_pivot_row(2) == 2
 print("PASSED")
 print("Testing method 'normalize_row(2)'...")
-A.normalize_row(2)
+A = A.normalize_row(2)
 assert A.elements == [[1, 2, 3], [0, 1, 2], [0, 0, 1]]
 print("PASSED")
 print("Testing method 'clear_above(2)'...")
-A.clear_above(2)
+A = A.clear_above(2)
 assert A.elements == [[1, 2, 0], [0, 1, 0], [0, 0, 1]]
 print("PASSED")
 print("Testing method 'clear_above(1)'...")
-A.clear_above(1)
+A = A.clear_above(1)
 assert A.elements == [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+print("PASSED")
+
+print("Testing method 'rref()'...")
+A = Matrix([[0, 1, 2], [3, 6, 9], [2, 6, 8]])
+A = A.rref()
+assert A.elements == [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+B = Matrix([[0, 0, -4, 0], [0, 0, 0.3, 0], [0, 2, 1, 0]])
+B = B.rref()
+assert B.elements == [[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0]]
 print("PASSED")

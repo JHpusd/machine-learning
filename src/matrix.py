@@ -5,7 +5,8 @@ class Matrix():
         self.num_cols = len(self.elements[0])
 
     def copy(self):
-        return self
+        clone_matrix = [[num for num in row] for row in self.elements]
+        return Matrix(clone_matrix)
 
     def add(self, input_matrix):
         result = []
@@ -72,44 +73,75 @@ class Matrix():
             if column_index == 0:
                 if self.elements[i][column_index] != 0:
                     return i
-            if column_index > 0:
-                ref_num = 0
-                for j in self.elements[i][:column_index]:
-                    ref_num += j
-                if ref_num == 0:
-                    return i
+            elif column_index > 0:
+                if self.elements[i][column_index] != 0:
+                    ref_num = 0
+                    for j in self.elements[i][:column_index]:
+                        ref_num += j
+                    if ref_num == 0:
+                        return i
+                else:
+                    continue
+            else:
+                return None
 
     def swap_rows(self, row_index_1, row_index_2):
-        replacement = self.elements[row_index_1]
-        self.elements[row_index_1] = self.elements[row_index_2]
-        self.elements[row_index_2] = replacement
+        clone_matrix = self.copy()
+        replacement = clone_matrix.elements[row_index_1]
+        clone_matrix.elements[row_index_1] = clone_matrix.elements[row_index_2]
+        clone_matrix.elements[row_index_2] = replacement
+        return clone_matrix
 
     def normalize_row(self, row_index):
-        for j in self.elements[row_index]:
+        clone_matrix = self.copy()
+        for j in clone_matrix.elements[row_index]:
             if j != 0:
                 initial_entry = j
                 break
-        for j in range(self.num_cols):
-            self.elements[row_index][j] /= initial_entry
+        for j in range(len(clone_matrix.elements[0])):
+            clone_matrix.elements[row_index][j] /= initial_entry
+        return clone_matrix
 
     def clear_below(self, row_index):
-        for num in self.elements[row_index]:
+        clone_matrix = self.copy()
+        for num in clone_matrix.elements[row_index]:
             if num != 0:
                 j = num
-                ref_index = self.elements[row_index].index(j)
+                col_index = clone_matrix.elements[row_index].index(j)
                 break
-        for row in self.elements[row_index + 1:]:
-            while row[ref_index] != 0:
-                for n in range(self.num_cols):
-                    row[n] -= self.elements[row_index][n]
+        for row in clone_matrix.elements[row_index + 1:]:
+            while row[col_index] != 0:
+                ref_num = row[col_index]
+                for n in range(len(clone_matrix.elements[0])):
+                    row[n] -= clone_matrix.elements[row_index][n]*ref_num
+        return clone_matrix
 
     def clear_above(self, row_index):
-        for num in self.elements[row_index]:
+        clone_matrix = self.copy()
+        for num in clone_matrix.elements[row_index]:
             if num != 0:
                 j = num
-                ref_index = self.elements[row_index].index(j)
+                col_index = clone_matrix.elements[row_index].index(j)
                 break
-        for row in self.elements[:row_index]:
-            while row[ref_index] != 0:
-                for n in range(self.num_cols):
-                    row[n] -= self.elements[row_index][n]
+        for row in clone_matrix.elements[:row_index]:
+            while row[col_index] != 0:
+                ref_num = row[col_index]
+                for n in range(len(clone_matrix.elements[0])):
+                    row[n] -= clone_matrix.elements[row_index][n]*ref_num
+        return clone_matrix
+
+    def rref(self):
+        clone_matrix = self.copy()
+        row_index = 0
+        for j in range(clone_matrix.num_cols):
+            pivot_index = clone_matrix.get_pivot_row(j)
+            if pivot_index != None:
+                if pivot_index != row_index:
+                    clone_matrix = clone_matrix.swap_rows(row_index, pivot_index)
+                clone_matrix = clone_matrix.normalize_row(row_index)
+                clone_matrix = clone_matrix.clear_above(row_index)
+                clone_matrix = clone_matrix.clear_below(row_index)
+                row_index += 1
+            else:
+                continue
+        return clone_matrix
