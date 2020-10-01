@@ -1,7 +1,7 @@
 import sys
 sys.path.append('src')
 from matrix import Matrix
-
+'''
 # Matrix operations
 A = Matrix([[1, 3], [2, 4]])
 B = A.copy()
@@ -30,7 +30,7 @@ G = B.matrix_multiply(C)
 print("Testing method 'matrix_multiply'...")
 assert G.elements == [[7, -3], [10, -4]]
 print("PASSED")
-'''
+
 # Generalized functions & transposed functions
 A = Matrix([[1, 0, 2, 0, 3], [0, 4, 0, 5, 0], [
     6, 0, 7, 0, 8], [-1, -2, -3, -4, -5]])
@@ -60,7 +60,7 @@ assert E.elements == [[38, 2, 47, 4, 56], [2, 20, 6, 28, 10], [
         56, 10, 77, 20, 98]]
 assert (E.is_equal(B), E.is_equal(C)) == (True, False)
 print("ALL PASSED")
-'''
+
 # Row reduction
 print("Testing row reduction on [[0, 1, 2], [3, 6, 9], [2, 6, 8]]...")
 A = Matrix([[0, 1, 2], [3, 6, 9], [2, 6, 8]])
@@ -113,4 +113,23 @@ assert A.elements == [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 B = Matrix([[0, 0, -4, 0], [0, 0, 0.3, 0], [0, 2, 1, 0]])
 B = B.rref()
 assert B.elements == [[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0]]
+print("PASSED")
+'''
+
+A = Matrix([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]])
+B = Matrix([[13, 14], [15, 16], [17, 18]])
+A_augmented = A.augment(B)
+print("Testing method 'augment'...")
+assert A_augmented.elements == [
+    [1, 2, 3, 4, 13, 14], [5, 6, 7, 8, 15, 16], [9, 10, 11, 12, 17, 18]]
+print("PASSED")
+print("Testing method 'get_rows'...")
+rows_02 = A_augmented.get_rows([0, 2])
+assert rows_02.elements == [
+    [1, 2, 3, 4, 13, 14], [9, 10, 11, 12, 17, 18]]
+print("PASSED")
+print("Testing method 'get_columns'...")
+cols_0123 = A_augmented.get_columns([0, 1, 2, 3])
+assert cols_0123.elements == [
+    [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
 print("PASSED")

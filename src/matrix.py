@@ -145,3 +145,30 @@ class Matrix():
             else:
                 continue
         return clone_matrix
+
+    def augment(self, other_matrix):
+        clone_matrix = self.copy()
+        assert clone_matrix.num_rows == other_matrix.num_rows
+        for i in range(other_matrix.num_rows):
+            for j in range(other_matrix.num_cols):
+                clone_matrix.elements[i].append(other_matrix.elements[i][j])
+        return clone_matrix
+    
+    def get_rows(self, row_nums):
+        clone_matrix = self.copy()
+        assert max(row_nums) <= clone_matrix.num_rows - 1
+        result_matrix = []
+        for row in row_nums:
+            result_matrix.append(clone_matrix.elements[row])
+        return Matrix(result_matrix)
+    
+    def get_columns(self, col_nums):
+        clone_matrix = self.copy()
+        assert max(col_nums) <= clone_matrix.num_cols - 1
+        result_matrix = []
+        for i in range(clone_matrix.num_rows):
+            result_matrix.append([])
+        for i in range(clone_matrix.num_rows):
+            for column in col_nums:
+                result_matrix[i].append(clone_matrix.elements[i][column])
+        return Matrix(result_matrix)
