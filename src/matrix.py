@@ -181,8 +181,7 @@ class Matrix():
             print("Error: cannot invert a non-square matrix")
             return
         identity_matrix = Matrix([[1 if j == i else 0 for j in range(clone_matrix.num_cols)] for i in range(clone_matrix.num_rows)])
-        augmented_matrix = clone_matrix.augment(identity_matrix)
-        reduced_matrix = augmented_matrix.rref()
+        reduced_matrix = clone_matrix.augment(identity_matrix).rref()
         for i in range(clone_matrix.num_rows):
             if reduced_matrix.get_pivot_row(i) != i:
                 print("Error: cannot invert a singular matrix")
