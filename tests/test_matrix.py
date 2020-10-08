@@ -105,7 +105,7 @@ print("Testing method 'clear_above(1)'...")
 A = A.clear_above(1)
 assert A.elements == [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 print("PASSED")
-'''
+
 print("Testing method 'rref()'...")
 A = Matrix([[0, 1, 2], [3, 6, 9], [2, 6, 8]])
 A = A.rref()
@@ -131,4 +131,19 @@ print("Testing method 'get_columns'...")
 cols_0123 = A_augmented.get_columns([0, 1, 2, 3])
 assert cols_0123.elements == [
     [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+print("PASSED")
+'''
+print("Testing method 'inverse'...")
+A = Matrix([[1, 2], [3, 4]])
+A_inv = A.inverse()
+assert A_inv.elements == [[-2, 1], [1.5, -0.5]]
+A = Matrix([[1, 2, 3], [1, 0, -1], [0.5, 0, 0]])
+A_inv = A.inverse()
+assert A_inv.elements == [[0, 0, 2], [0.5, 1.5, -4], [0, -1, 2]]
+A = Matrix([[1, 2, 3, 0], [1, 0, 1, 0], [0, 1, 0, 0]])
+print("Expecting error...")
+A_inv = A.inverse()
+print("Expecting error...")
+A = Matrix([[1, 2, 3], [3, 2, 1], [1, 1, 1]])
+A_inv = A.inverse()
 print("PASSED")

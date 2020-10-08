@@ -136,6 +136,8 @@ class Matrix():
         for j in range(clone_matrix.num_cols):
             pivot_index = clone_matrix.get_pivot_row(j)
             if pivot_index != None:
+                if row_index not in range(clone_matrix.num_rows):
+                    continue
                 if pivot_index != row_index:
                     clone_matrix = clone_matrix.swap_rows(row_index, pivot_index)
                 clone_matrix = clone_matrix.normalize_row(row_index)
@@ -171,4 +173,23 @@ class Matrix():
         for i in range(clone_matrix.num_rows):
             for column in col_nums:
                 result_matrix[i].append(clone_matrix.elements[i][column])
+        return Matrix(result_matrix)
+
+    def inverse(self):
+        clone_matrix = self.copy()
+        if clone_matrix.num_rows != clone_matrix.num_cols:
+            print("Error: cannot invert a non-square matrix")
+            return
+        identity_matrix = Matrix([[1 if j == i else 0 for j in range(clone_matrix.num_cols)] for i in range(clone_matrix.num_rows)])
+        augmented_matrix = clone_matrix.augment(identity_matrix)
+        reduced_matrix = augmented_matrix.rref()
+        for i in range(clone_matrix.num_rows):
+            if reduced_matrix.get_pivot_row(i) != i:
+                print("Error: cannot invert a singular matrix")
+                return
+        result_matrix = []
+        for i in range(clone_matrix.num_rows):
+            result_matrix.append([])
+            for j in range(clone_matrix.num_cols, reduced_matrix.num_cols):
+                result_matrix[i].append(reduced_matrix.elements[i][j])
         return Matrix(result_matrix)
