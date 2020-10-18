@@ -192,3 +192,26 @@ class Matrix():
             for j in range(clone_matrix.num_cols, reduced_matrix.num_cols):
                 result_matrix[i].append(reduced_matrix.elements[i][j])
         return Matrix(result_matrix)
+    
+    def determinant(self):
+        mult_constant = 1
+        clone_matrix = self.copy()
+        row_index = 0
+        if clone_matrix.num_cols != clone_matrix.num_rows:
+           return ("Error: Cannot take determinant of non-square matrix")
+        for j in range(clone_matrix.num_cols):
+            pivot_index = clone_matrix.get_pivot_row(j)
+            if pivot_index != None:
+                if row_index not in range(clone_matrix.num_rows):
+                    continue
+                if pivot_index != row_index:
+                    clone_matrix = clone_matrix.swap_rows(row_index, pivot_index)
+                mult_constant *= clone_matrix.elements[pivot_index][j]
+                clone_matrix = clone_matrix.normalize_row(row_index)
+                clone_matrix = clone_matrix.clear_above(row_index)
+                clone_matrix = clone_matrix.clear_below(row_index)
+                row_index += 1
+            else:
+                mult_constant *= 0
+                continue
+        return mult_constant

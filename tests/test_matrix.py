@@ -132,7 +132,8 @@ cols_0123 = A_augmented.get_columns([0, 1, 2, 3])
 assert cols_0123.elements == [
     [1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
 print("PASSED")
-'''
+
+# Inverse operations
 print("Testing method 'inverse'...")
 A = Matrix([[1, 2], [3, 4]])
 A_inv = A.inverse()
@@ -146,4 +147,28 @@ A_inv = A.inverse()
 print("Expecting error...")
 A = Matrix([[1, 2, 3], [3, 2, 1], [1, 1, 1]])
 A_inv = A.inverse()
+print("PASSED")
+'''
+# Determinants
+print("Testing method 'determinant'...")
+A = Matrix([[1, 2], [3, 4]])
+ans = A.determinant()
+assert round(ans, 6) == -2
+A = Matrix([[1, 2 ,0.5], [3, 4, -1], [8, 7, -2]])
+ans = A.determinant()
+assert round(ans, 6) == -10.5
+A = Matrix([[1,2,0.5,0,1,0], [3,4,-1,1,0,1], [8,7,-2,1,1,1], [
+    -1,1,0,1,0,1], [0,0.35,0,-5,1,1], [1,1,1,1,1,0]])
+ans = A.determinant()
+assert round(ans, 6) == -37.3
+A = Matrix([[1,2,0.5,0,1,0], [3,4,-1,1,0,1], [8,7,-2,1,1,1], [
+    -1,1,0,1,0,1], [0,0.35,0,-5,1,1], [1,1,1,1,1,0], [2,3,1.5,1,2,0]])
+ans = A.determinant()
+print("Expecting error...")
+print(ans)
+A = Matrix([[1,2,0.5,0,1,0,1], [3,4,-1,1,0,1,0], [8,7,-2,1,1,1,0], [
+    -1,1,0,1,0,1,0], [0,0.35,0,-5,1,1,0], [1,1,1,1,1,0,0], [
+        2,3,1.5,1,2,0,1]])
+ans = A.determinant()
+assert round(ans, 6) == 0
 print("PASSED")
