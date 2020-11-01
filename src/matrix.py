@@ -8,7 +8,7 @@ class Matrix():
         clone_matrix = [[num for num in row] for row in self.elements]
         return Matrix(clone_matrix)
 
-    def add(self, input_matrix):
+    def __add__(self, input_matrix):
         result = []
         for i in range(self.num_rows):
             result.append([])
@@ -17,7 +17,7 @@ class Matrix():
                     self.elements[i][j] + input_matrix.elements[i][j])
         return Matrix(result)
 
-    def subtract(self, input_matrix):
+    def __sub__(self, input_matrix):
         result = []
         for i in range(self.num_rows):
             result.append([])
@@ -26,16 +26,16 @@ class Matrix():
                     self.elements[i][j] - input_matrix.elements[i][j])
         return Matrix(result)
 
-    def scalar_multiply(self, input_scalar):
+    def __mul__(self, input_scalar):
         result = []
         for i in range(self.num_rows):
             result.append([])
             for j in range(self.num_cols):
                 result[i].append(
-                    self.elements[i][j] * input_scalar)
+                    round(self.elements[i][j] * input_scalar, 6))
         return Matrix(result)
 
-    def matrix_multiply(self, input_matrix):
+    def __matmul__(self, input_matrix):
         result = []
         for i in range(self.num_rows):
             result.append([])
@@ -56,7 +56,7 @@ class Matrix():
                 result[i].append(self.elements[j][i])
         return Matrix(result)
 
-    def is_equal(self, input_matrix):
+    def __eq__(self, input_matrix):
         if self.elements == input_matrix.elements:
             return True
         else:
@@ -206,6 +206,7 @@ class Matrix():
                     continue
                 if pivot_index != row_index:
                     clone_matrix = clone_matrix.swap_rows(row_index, pivot_index)
+                    mult_constant *= -1
                 mult_constant *= clone_matrix.elements[pivot_index][j]
                 clone_matrix = clone_matrix.normalize_row(row_index)
                 clone_matrix = clone_matrix.clear_above(row_index)
@@ -215,3 +216,10 @@ class Matrix():
                 mult_constant *= 0
                 continue
         return mult_constant
+    
+    def exponent(self, power):
+        identity_matrix = Matrix([[1 if j == i else 0 for j in range(self.num_cols)] for i in range(self.num_rows)])
+        for _ in range(power):
+            identity_matrix = identity_matrix @ (self)
+        return identity_matrix
+

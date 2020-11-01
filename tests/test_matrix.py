@@ -11,22 +11,22 @@ assert B.elements == [[1, 3], [2, 4]]
 print("PASSED")
 
 C = Matrix([[1, 0], [2, -1]])
-D = B.add(C)
+D = B + C
 print("Testing method 'add'...")
 assert D.elements == [[2, 3], [4, 3]]
 print("PASSED")
 
-E = B.subtract(C)
+E = B - C
 print("Testing method 'subtract'...")
 assert E.elements == [[0, 3], [0, 5]]
 print("PASSED")
 
-F = B.scalar_multiply(2)
+F = B * 2
 print("Testing method 'scalar_multiply'...")
 assert F.elements == [[2, 6], [4, 8]]
 print("PASSED")
 
-G = B.matrix_multiply(C)
+G = B @ C
 print("Testing method 'matrix_multiply'...")
 assert G.elements == [[7, -3], [10, -4]]
 print("PASSED")
@@ -148,7 +148,7 @@ print("Expecting error...")
 A = Matrix([[1, 2, 3], [3, 2, 1], [1, 1, 1]])
 A_inv = A.inverse()
 print("PASSED")
-'''
+
 # Determinants
 print("Testing method 'determinant'...")
 A = Matrix([[1, 2], [3, 4]])
@@ -171,4 +171,38 @@ A = Matrix([[1,2,0.5,0,1,0,1], [3,4,-1,1,0,1,0], [8,7,-2,1,1,1,0], [
         2,3,1.5,1,2,0,1]])
 ans = A.determinant()
 assert round(ans, 6) == 0
+print("PASSED")
+'''
+# Exponent and operator overloads
+print("Testing method 'exponenet'...")
+A = Matrix([[1, 1, 0],[2, -1, 0],[0, 0, 3]])
+assert A.exponent(3).elements == [[3, 3, 0], [6, -3, 0], [0, 0, 27]]
+print("PASSED")
+
+print("Testing overloaded operators...")
+A = Matrix([[1,0,2,0,3],[0,4,0,5,0],[6,0,7,0,8],[-1,-2,-3,-4,-5]])
+A_t = A.transpose()
+assert A_t.elements == [[1, 0, 6, -1], [0, 4, 0, -2], [2, 0, 7, -3], [
+    0, 5, 0, -4], [3, 0, 8, -5]]
+B = A_t @ A
+assert B.elements == [[38, 2, 47, 4, 56], [2, 20, 6, 28, 10], [
+    47, 6, 62, 12, 77], [4, 28, 12, 41, 20], [56, 10, 77, 20, 98]]
+C = B * 0.1
+assert C.elements == [[3.8,  .2, 4.7,  .4, 5.6],[
+    .2, 2.0,  .6, 2.8, 1.0],[4.7,  .6, 6.2, 1.2, 7.7],[
+        .4, 2.8, 1.2, 4.1, 2.0],[5.6, 1.0, 7.7, 2.0, 9.8]]
+D = B - C
+assert D.elements == [[34.2, 1.8, 42.3, 3.6, 50.4], [
+    1.8, 18.0, 5.4, 25.2, 9.0], [42.3, 5.4, 55.8, 10.8, 69.3], [
+        3.6, 25.2, 10.8, 36.9, 18.0], [50.4, 9.0, 69.3, 18.0, 88.2]]
+E = D + C
+assert E.elements == [[38.0, 2.0, 47.0, 4.0, 56.0], [
+    2.0, 20.0, 6.0, 28.0, 10.0], [47.0, 6.0, 62.0, 12.0, 77.0], [
+        4.0, 28.0, 12.0, 41.0, 20.0], [56.0, 10.0, 77.0, 20.0, 98.0]]
+assert E == B
+try:
+    assert E == C
+    print("didn't work")
+except:
+    None
 print("PASSED")
