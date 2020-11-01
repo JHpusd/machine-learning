@@ -172,7 +172,7 @@ A = Matrix([[1,2,0.5,0,1,0,1], [3,4,-1,1,0,1,0], [8,7,-2,1,1,1,0], [
 ans = A.determinant()
 assert round(ans, 6) == 0
 print("PASSED")
-'''
+
 # Exponent and operator overloads
 print("Testing method 'exponenet'...")
 A = Matrix([[1, 1, 0],[2, -1, 0],[0, 0, 3]])
@@ -205,4 +205,28 @@ try:
     print("didn't work")
 except:
     None
+print("PASSED")
+'''
+# cofactor method determinant
+print("Testing method 'cofactor_method_determinant'...")
+A = Matrix([[1, 2], [3, 4]])
+ans = A.cofactor_method_determinant()
+assert round(ans, 6) == -2
+A = Matrix([[1, 2 ,0.5], [3, 4, -1], [8, 7, -2]])
+ans = A.cofactor_method_determinant()
+assert round(ans, 6) == -10.5
+A = Matrix([[1,2,0.5,0,1,0], [3,4,-1,1,0,1], [8,7,-2,1,1,1], [
+    -1,1,0,1,0,1], [0,0.35,0,-5,1,1], [1,1,1,1,1,0]])
+ans = A.cofactor_method_determinant()
+assert round(ans, 6) == -37.3
+A = Matrix([[1,2,0.5,0,1,0], [3,4,-1,1,0,1], [8,7,-2,1,1,1], [
+    -1,1,0,1,0,1], [0,0.35,0,-5,1,1], [1,1,1,1,1,0], [2,3,1.5,1,2,0]])
+ans = A.cofactor_method_determinant()
+print("Expecting error...")
+print(ans)
+A = Matrix([[1,2,0.5,0,1,0,1], [3,4,-1,1,0,1,0], [8,7,-2,1,1,1,0], [
+    -1,1,0,1,0,1,0], [0,0.35,0,-5,1,1,0], [1,1,1,1,1,0,0], [
+        2,3,1.5,1,2,0,1]])
+ans = A.cofactor_method_determinant()
+assert round(ans, 6) == 0
 print("PASSED")

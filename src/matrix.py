@@ -223,3 +223,38 @@ class Matrix():
             identity_matrix = identity_matrix @ (self)
         return identity_matrix
 
+    def cofactor_num(self, row_num, col_num):
+        cofactor_num = self.elements[row_num][col_num]
+        sign = (row_num * self.num_cols) + col_num
+        cofactor_num *= (-1)**sign
+        return cofactor_num
+    
+    def cofactor_reducer(self, col_num):
+        clone_matrix = self.copy()
+        row_list = []
+        for num in range(self.num_rows):
+            if num != 0:
+                row_list.append(num)
+        col_list = []
+        for num in range(self.num_cols):
+            if num != col_num:
+                col_list.append(num)
+        new_matrix = clone_matrix.get_rows(row_list)
+        new_matrix = new_matrix.get_columns(col_list)
+        return new_matrix
+    
+    def cofactor_method_determinant(self):
+        clone_matrix = self.copy()
+        result = 0
+        if clone_matrix.num_cols != clone_matrix.num_rows:
+            return ("Error: Cannot take determinant of non-square matrix")
+        if clone_matrix.num_cols == 2 and clone_matrix.num_rows == 2:
+            first_cross = clone_matrix.elements[0][0] * clone_matrix.elements[1][1]
+            second_cross = clone_matrix.elements[0][1] * clone_matrix.elements[1][0]
+            return first_cross - second_cross
+        else:
+            for j in range(self.num_cols):
+                mini_matrix = self.cofactor_reducer(j)
+                reduced_matrix = mini_matrix.cofactor_method_determinant()
+                result += self.cofactor_num(0, j) * reduced_matrix
+            return result
