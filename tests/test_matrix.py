@@ -206,7 +206,7 @@ try:
 except:
     None
 print("PASSED")
-'''
+
 # cofactor method determinant
 print("Testing method 'cofactor_method_determinant'...")
 A = Matrix([[1, 2], [3, 4]])
@@ -230,3 +230,13 @@ A = Matrix([[1,2,0.5,0,1,0,1], [3,4,-1,1,0,1,0], [8,7,-2,1,1,1,0], [
 ans = A.cofactor_method_determinant()
 assert round(ans, 6) == 0
 print("PASSED")
+'''
+# More overloaded operators
+print("Testing more overloaded operators...")
+A = Matrix([[1, 1, 0],[2, -1, 0],[0, 0, 3]])
+B = 0.1 * A
+assert B.elements == [[0.1, 0.1, 0],[0.2, -0.1, 0],[0, 0, 0.3]]
+C = A ** 3
+assert C.elements == [[3, 3, 0],[6, -3, 0],[0, 0, 27]]
+print("PASSED")
+

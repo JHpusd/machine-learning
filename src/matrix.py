@@ -34,6 +34,15 @@ class Matrix():
                 result[i].append(
                     round(self.elements[i][j] * input_scalar, 6))
         return Matrix(result)
+    
+    def __rmul__(self, input_scalar):
+        result = []
+        for i in range(self.num_rows):
+            result.append([])
+            for j in range(self.num_cols):
+                result[i].append(
+                    round(self.elements[i][j] * input_scalar, 6))
+        return Matrix(result)
 
     def __matmul__(self, input_matrix):
         result = []
@@ -217,7 +226,7 @@ class Matrix():
                 continue
         return mult_constant
     
-    def exponent(self, power):
+    def __pow__(self, power):
         identity_matrix = Matrix([[1 if j == i else 0 for j in range(self.num_cols)] for i in range(self.num_rows)])
         for _ in range(power):
             identity_matrix = identity_matrix @ (self)
