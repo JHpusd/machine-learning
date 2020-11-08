@@ -25,3 +25,10 @@ class DataFrame():
                     new_list.append(clone_dict[key][j])
             clone_dict[key] = new_list
         return DataFrame(clone_dict, self.columns)
+    
+    def apply(self, key, function):
+        new_list = []
+        for num in self.data_dict[key]:
+            new_list.append(function(num))
+        self.data_dict[key] = new_list
+        return self

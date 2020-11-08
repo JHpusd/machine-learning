@@ -8,8 +8,9 @@ data_dict = {
     'Sarah': [3, 1, 4, 0]
 }
 
-print("Testing class DataFrame ...")
 df1 = DataFrame(data_dict, ['Pete', 'John', 'Sarah'])
+'''
+print("Testing class DataFrame ...")
 
 assert df1.data_dict == {'Pete': [1, 0, 1, 0],'John': [2, 1, 0, 2],'Sarah': [3, 1, 4, 0]}
 assert df1.columns == ['Pete', 'John', 'Sarah']
@@ -21,4 +22,16 @@ assert df2.columns == ['Sarah', 'Pete']
 
 df3 = df1.select_rows([1, 3])
 assert df3.to_array() == [[0, 1, 1], [0, 2, 0]]
+print("PASSED")
+'''
+print("Testing method 'apply'...")
+
+def lambda_x(x):
+    return 7 * x
+
+df2 = df1.apply('John', lambda_x)
+assert df2.data_dict == { 'Pete': [1, 0, 1, 0],
+    'John': [14, 7, 0, 14],
+    'Sarah': [3, 1, 4, 0]
+}
 print("PASSED")
