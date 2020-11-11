@@ -32,3 +32,45 @@ class DataFrame():
             new_list.append(function(num))
         self.data_dict[key] = new_list
         return self
+    
+    @classmethod
+    def from_array(cls, arr, columns):
+        new_dict = {}
+        for i in range(len(columns)):
+            new_dict[columns[i]] = []
+            for j in range(len(arr)):
+                new_dict[columns[i]].append(arr[j][i])
+        return cls(new_dict, columns)
+    
+    def convert_row_from_array_to_dict(self, row, columns):
+        result_dict = {}
+        for i in range(len(columns)):
+            result_dict[columns[i]] = row[i]
+        return result_dict
+    
+    def select_rows_where(self, function):
+        array_copy = self.to_array()
+        result_list = []
+        for data_row in array_copy:
+            row_dict = self.convert_row_from_array_to_dict(data_row, self.columns)
+            if function(row_dict):
+                result_list.append(data_row)
+            else:
+                continue
+        return DataFrame.from_array(result_list, self.columns)
+    
+    def order_by(self, attribute, ascent):
+        array_copy = self.to_array()
+        att_index = self.columns.index(attribute)
+        result_list = []
+        while len(array_copy) > 0:
+            min_row = array_copy[0]
+            for data_row in array_copy:
+                if data_row[att_index] < min_row[att_index]:
+                    min_row = data_row
+            result_list.append(min_row)
+            array_copy.remove(min_row)
+        if ascent:
+            return DataFrame.from_array(result_list, self.columns)
+        else:
+            return DataFrame.from_array(result_list[::-1], self.columns)
