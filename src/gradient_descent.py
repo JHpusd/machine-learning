@@ -14,7 +14,7 @@ class GradientDescent():
             derivative = ((self.func(*args_1) - self.func(*args_2))) / delta
             grad_list.append(derivative)
         return grad_list
-    
+
     def descend(self, alpha, delta, num_steps):
         grad_list = self.compute_gradient(delta)
         for _ in range(num_steps):

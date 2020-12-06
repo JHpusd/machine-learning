@@ -17,43 +17,43 @@ minimizer = GradientDescent(single_variable_function, [0])
 assert minimizer.points == [0]
 grad_list = minimizer.compute_gradient(0.01)
 for i in range(len(grad_list)):
-    grad_list[i] = round(grad_list[i], 5)
+    grad_list[i] = round(grad_list[i], 3)
 assert grad_list == [-2.00000]
 minimizer.descend(0.001, 0.01, 1)
 for i in range(len(minimizer.points)):
-    minimizer.points[i] = round(minimizer.points[i], 5)
+    minimizer.points[i] = round(minimizer.points[i], 3)
 assert minimizer.points == [0.00200]
 
 minimizer = GradientDescent(two_variable_function, [0 ,0])
 assert minimizer.points == [0, 0]
 grad_list = minimizer.compute_gradient(0.01)
 for i in range(len(grad_list)):
-    grad_list[i] = round(grad_list[i], 5)
-assert grad_list == [-2.00000, 3.00002]
+    grad_list[i] = round(grad_list[i], 3)
+assert grad_list == [-2.00000, 3.000]
 minimizer.descend(0.001, 0.01, 1)
 for i in range(len(minimizer.points)):
-    minimizer.points[i] = round(minimizer.points[i], 5)
+    minimizer.points[i] = round(minimizer.points[i], 3)
 assert minimizer.points == [0.00200, -0.00300]
 
 minimizer = GradientDescent(three_variable_function, [0 ,0, 0])
 assert minimizer.points == [0, 0, 0]
 grad_list = minimizer.compute_gradient(0.01)
 for i in range(len(grad_list)):
-    grad_list[i] = round(grad_list[i], 5)
-assert grad_list == [-2.00000, 3.00002, -4.00010]
+    grad_list[i] = round(grad_list[i], 3)
+assert grad_list == [-2.00000, 3.000, -4.000]
 minimizer.descend(0.001, 0.01, 1)
 for i in range(len(minimizer.points)):
-    minimizer.points[i] = round(minimizer.points[i], 5)
+    minimizer.points[i] = round(minimizer.points[i], 3)
 assert minimizer.points == [0.00200, -0.00300, 0.00400]
 
 minimizer = GradientDescent(six_variable_function, [0,0,0,0,0,0])
 assert minimizer.points == [0,0,0,0,0,0]
 grad_list = minimizer.compute_gradient(0.01)
 for i in range(len(grad_list)):
-    grad_list[i] = round(grad_list[i], 5)
-assert grad_list == [-2.00000, 3.00002, -4.00010, 1.00000, 2.00000, 3.00000]
+    grad_list[i] = round(grad_list[i], 3)
+assert grad_list == [-2.00000, 3.000, -4.000, 1.00000, 2.00000, 3.00000]
 minimizer.descend(0.001, 0.01, 1)
 for i in range(len(minimizer.points)):
-    minimizer.points[i] = round(minimizer.points[i], 5)
+    minimizer.points[i] = round(minimizer.points[i],3)
 assert minimizer.points == [0.00200, -0.00300, 0.00400, -0.00100, -0.00200, -0.00300]
 print("PASSED")
