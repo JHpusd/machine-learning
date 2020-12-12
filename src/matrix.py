@@ -74,7 +74,7 @@ class Matrix():
     def round(self, decimal_places):
         for i in self.elements:
             for j in range(len(i)):
-                i[j] = round(i[j], 5)
+                i[j] = round(i[j], decimal_places)
         return Matrix(self.elements)
 
     def get_pivot_row(self, column_index):

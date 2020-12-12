@@ -23,22 +23,29 @@ class LinearRegressor():
             for j in range(len(df_array[0])):
                 if j == 0:
                     sys_eq_matrix[i].append(1)
-                else:
-                    for indx in range(len(df_array[i])):
-                        if indx != d_index:
-                            sys_eq_matrix[i].append(df_array[i][indx])
-                            break
+                if j != d_index:
+                    sys_eq_matrix[i].append(df_array[i][j])
+                elif j == d_index:
+                    continue
         sys_matrix = Matrix(sys_eq_matrix)
         trans_sys_matrix = sys_matrix.transpose()
         new_sys_matrix = trans_sys_matrix @ sys_matrix
         inv_sys_matrix = new_sys_matrix.inverse()
-        result = inv_sys_matrix @ trans_sys_matrix @ d_column
-        return result
+        coeff_matrix = inv_sys_matrix @ trans_sys_matrix @ d_column
+        coeff_dict = {}
+        for i in range(len(coeff_matrix.elements)):
+            if i == 0:
+                coeff_dict['constant'] = coeff_matrix.elements[i][0]
+            elif i != 0:
+                coeff_dict[self.df.columns[i-1]] = coeff_matrix.elements[i][0]
+        return coeff_dict
     
     def predict(self, input_dict):
-        for val in self.coefficients.elements[0]:
-            a = val
-        for val in self.coefficients.elements[1]:
-            b = val
-        for key in input_dict:
-            return a + b*input_dict[key]
+        result = 0
+        for key in self.coefficients:
+            if key in input_dict:
+                result += self.coefficients[key] * input_dict[key]
+            elif key not in input_dict:
+                result += self.coefficients[key]
+        return result
+
