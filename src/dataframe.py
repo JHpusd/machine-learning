@@ -74,3 +74,28 @@ class DataFrame():
             return DataFrame.from_array(result_list, self.columns)
         else:
             return DataFrame.from_array(result_list[::-1], self.columns)
+    
+    @classmethod
+    def from_csv(cls, pathing, header):
+        data = {}
+        col_names = []
+        with open(pathing, "r") as file:
+            full_split_file = []
+            file_rows = file.read().split('\n')
+            for row in file_rows:
+                full_split_file.append(row.split(', '))
+        for element in full_split_file[0]:
+            col_names.append(element)
+        for i in range(len(col_names)):
+            data[col_names[i]] = []
+            for j in range(len(full_split_file)):
+                data[col_names[i]].append(full_split_file[j][i])
+        if header == True:
+            return cls(data, col_names)
+        elif header == False:
+            for key in data:
+                data[key] = data[key][1:]
+            return cls(data, col_names)
+        else:
+            print("Header needs to be true or false")
+            return
