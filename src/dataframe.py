@@ -84,18 +84,16 @@ class DataFrame():
             file_rows = file.read().split('\n')
             for row in file_rows:
                 full_split_file.append(row.split(', '))
-        for element in full_split_file[0]:
-            col_names.append(element)
+        if header == True:
+            for element in full_split_file[0]:
+                col_names.append(element)
+        elif header == False:
+            for i in range(len(full_split_file[0])):
+                col_names.append(i)
         for i in range(len(col_names)):
             data[col_names[i]] = []
             for j in range(len(full_split_file)):
                 data[col_names[i]].append(full_split_file[j][i])
-        if header == True:
-            return cls(data, col_names)
-        elif header == False:
-            for key in data:
-                data[key] = data[key][1:]
-            return cls(data, col_names)
-        else:
-            print("Header needs to be true or false")
-            return
+        for key in data:
+            data[key] = data[key][1:]
+        return cls(data, col_names)

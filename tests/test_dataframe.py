@@ -58,7 +58,8 @@ filepath = path_to_datasets + filename
 df = DataFrame.from_csv(filepath, True)
 
 print("Testing from_csv method for dataframe...")
-assert df.to_array() == [['"Month"', '"1958"', '"1959"', '"1960"'],[
+assert df.columns == ['"Month"', '"1958"', '"1959"', '"1960"']
+assert df.to_array() == [[
     '"JAN"', '340', '360', '417'],[
         '"FEB"', '318', '342', '391'],[
             '"MAR"', '362', '406', '419'],[
