@@ -33,7 +33,8 @@ class LinearRegressor():
         inv_sys_matrix = new_sys_matrix.inverse()
         coeff_matrix = inv_sys_matrix @ trans_sys_matrix @ d_column
         coeff_dict = {}
-        for i in range(len(coeff_matrix.elements)):
+        self.df.columns.remove(self.dv)
+        for i in range(len(self.df.columns) + 1):
             if i == 0:
                 coeff_dict['constant'] = coeff_matrix.elements[i][0]
             elif i != 0:
@@ -47,5 +48,6 @@ class LinearRegressor():
                 result += self.coefficients[key] * input_dict[key]
             elif key not in input_dict:
                 result += self.coefficients[key]
+            
         return result
 
