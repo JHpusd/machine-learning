@@ -33,12 +33,13 @@ class LinearRegressor():
         inv_sys_matrix = new_sys_matrix.inverse()
         coeff_matrix = inv_sys_matrix @ trans_sys_matrix @ d_column
         coeff_dict = {}
-        self.df.columns.remove(self.dv)
-        for i in range(len(self.df.columns) + 1):
+        no_dv_columns = [col for col in self.df.columns]
+        no_dv_columns.remove(self.dv)
+        for i in range(len(no_dv_columns) + 1):
             if i == 0:
                 coeff_dict['constant'] = coeff_matrix.elements[i][0]
             elif i != 0:
-                coeff_dict[self.df.columns[i-1]] = coeff_matrix.elements[i][0]
+                coeff_dict[no_dv_columns[i-1]] = coeff_matrix.elements[i][0]
         return coeff_dict
     
     def predict(self, input_dict):

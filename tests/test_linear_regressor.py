@@ -60,6 +60,9 @@ print(regressor.predict({
     'beef * pb': 0
 }))
 
+print("data: " + str(regressor.df.data_dict))
+print("columns: " + str(regressor.df.columns))
+
 print(regressor.predict({
     'beef': 5,
     'pb': 5,
