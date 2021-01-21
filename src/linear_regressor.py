@@ -29,8 +29,7 @@ class LinearRegressor():
                     continue
         sys_matrix = Matrix(sys_eq_matrix)
         trans_sys_matrix = sys_matrix.transpose()
-        new_sys_matrix = trans_sys_matrix @ sys_matrix
-        inv_sys_matrix = new_sys_matrix.inverse()
+        inv_sys_matrix = (trans_sys_matrix @ sys_matrix).inverse()
         coeff_matrix = inv_sys_matrix @ trans_sys_matrix @ d_column
         coeff_dict = {}
         no_dv_columns = [col for col in self.df.columns]
@@ -41,7 +40,7 @@ class LinearRegressor():
             elif i != 0:
                 coeff_dict[no_dv_columns[i-1]] = coeff_matrix.elements[i][0]
         return coeff_dict
-    
+
     def predict(self, input_dict):
         result = 0
         for key in self.coefficients:
@@ -49,6 +48,5 @@ class LinearRegressor():
                 result += self.coefficients[key] * input_dict[key]
             elif key not in input_dict:
                 result += self.coefficients[key]
-            
         return result
 
