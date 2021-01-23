@@ -6,14 +6,15 @@ from linear_regressor import LinearRegressor
 import math
 
 class LogisticRegressor():
-    def __init__(self, data, dependent_variable):
+    def __init__(self, data, dependent_variable, upper_bound):
         self.df = data
         self.dv = dependent_variable
+        self.up_bound = upper_bound
         self.coefficients = self.calc_coefficients()
-    
+
     def calc_coefficients(self):
         df_transform = {key:self.df.data_dict[key] for key in self.df.data_dict}
-        df_transform[self.dv] = [math.log((1/i)-1) for i in df_transform[self.dv]]
+        df_transform[self.dv] = [math.log((self.up_bound/i)-1) for i in df_transform[self.dv]]
         df_transform = DataFrame(df_transform, self.df.columns)
         linear_reg = LinearRegressor(df_transform, self.dv)
         return linear_reg.coefficients
@@ -25,4 +26,4 @@ class LogisticRegressor():
                 coeff_sum += self.coefficients[key] * input_dict[key]
             else:
                 coeff_sum += self.coefficients[key]
-        return 1/(1 + math.exp(coeff_sum))
+        return self.up_bound/(1 + math.exp(coeff_sum))
