@@ -127,7 +127,7 @@ class DataFrame():
                 for var_name in dummy_vars:
                     new_cols.append(var_name)
 
-        new_data_dict = {key:self.data_dict[key] for key in self.data_dict}
+        new_data_dict = dict(self.data_dict)
         del new_data_dict[dummy_name]
         for var in dummy_vars:
             new_data_dict[var] = [0 if var not in i else 1 for i in target_row]
