@@ -109,3 +109,28 @@ class DataFrame():
         new_col_list = [col_1_list[i]*col_2_list[i] for i in range(len(col_1_list))]
         new_data_dict[col_1 + ' * ' + col_2] = new_col_list
         return DataFrame(new_data_dict, new_cols)
+
+    def create_dummy_variables(self, dummy_name):
+        target_row = [i for i in self.data_dict[dummy_name]]
+
+        dummy_vars = []
+        for i in target_row:
+            for var in i:
+                if var not in dummy_vars:
+                    dummy_vars.append(var)
+
+        new_cols = []
+        for col_name in self.columns:
+            if col_name != dummy_name:
+                new_cols.append(col_name)
+            else:
+                for var_name in dummy_vars:
+                    new_cols.append(var_name)
+
+        new_data_dict = {key:self.data_dict[key] for key in self.data_dict}
+        del new_data_dict[dummy_name]
+        for var in dummy_vars:
+            new_data_dict[var] = [0 if var not in i else 1 for i in target_row]
+        
+        return DataFrame(new_data_dict, new_cols)
+
