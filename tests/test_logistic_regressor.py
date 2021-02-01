@@ -14,7 +14,6 @@ df = DataFrame.from_array(
 
 log_reg = LogisticRegressor(df, 'y')
 print(log_reg.predict({'x': 5}))
-'''
 
 df = DataFrame.from_array(
     [[0, 0, 1], 
@@ -49,3 +48,6 @@ print(log_reg.predict({
     'pb': 5,
     'beef * pb': 25
 }))
+'''
+
+

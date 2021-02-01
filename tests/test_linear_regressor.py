@@ -35,7 +35,7 @@ prediction = regressor.predict({
 prediction = round(prediction, 8)
 assert prediction == 0.47102804
 print("PASSED")
-'''
+
 df = DataFrame.from_array(
     [[0, 0, 1], 
     [1, 0, 2], 
@@ -68,4 +68,4 @@ print(regressor.predict({
     'pb': 5,
     'beef * pb': 25
 }))
-
+'''

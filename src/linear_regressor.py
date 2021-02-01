@@ -42,6 +42,16 @@ class LinearRegressor():
         return coeff_dict
 
     def predict(self, input_dict):
+        all_cols = [col for col in self.df.columns]
+        all_cols.remove(self.dv)
+        
+        for key in all_cols:
+            if key not in input_dict and " * " not in key:
+                input_dict[key] = 0
+            if key not in input_dict and " * " in key:
+                keys = key.split(" * ")
+                input_dict[key] = input_dict[keys[0]] * input_dict[keys[1]]
+
         result = 0
         for key in self.coefficients:
             if key in input_dict:
@@ -49,4 +59,6 @@ class LinearRegressor():
             elif key not in input_dict:
                 result += self.coefficients[key]
         return result
+    
+
 

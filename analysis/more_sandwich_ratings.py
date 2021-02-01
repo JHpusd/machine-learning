@@ -45,7 +45,7 @@ no_zero_df = DataFrame(no_zero_dict, df.columns)
 
 log_reg = LogisticRegressor(no_zero_df, 'rating', 10)
 # print(log_reg.coefficients)
-
+'''
 print(regressor.predict({
     'beef': 8,
     'pb': 0,
@@ -170,4 +170,15 @@ print(log_reg.predict({
     'pb * jelly': 0,
     'mayo * jelly': 1
 }))
+'''
+observation = {'beef': 8, 'mayo': 1}
+print(regressor.predict(observation))
+print(log_reg.predict(observation))
 
+observation = {'beef': 8, 'pb': 4, 'mayo': 1}
+print(regressor.predict(observation))
+print(log_reg.predict(observation))
+
+observation = {'beef': 8, 'mayo': 1, 'jelly': 1}
+print(regressor.predict(observation))
+print(log_reg.predict(observation))
