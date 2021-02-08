@@ -17,5 +17,3 @@ cols = ['x', 'x^2', 'x^3', 'y']
 df = DataFrame.from_array(expanded_data, cols)
 poly_regressor = LinearRegressor(df, 'y')
 print(poly_regressor.coefficients)
-
-
