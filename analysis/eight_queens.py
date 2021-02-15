@@ -66,9 +66,10 @@ def random_optimizer(n):
     cost_dict["locations"] = lowest_cost_coords
     cost_dict["cost"] = lowest_cost
     return cost_dict
-
+'''
 print("n = 10:\n" + str(random_optimizer(10)) + "\n")
 print("n = 50:\n" + str(random_optimizer(50)) + "\n")
 print("n = 100:\n" + str(random_optimizer(100)) + "\n")
 print("n = 500:\n" + str(random_optimizer(500)) + "\n")
 print("n = 1000:\n" + str(random_optimizer(1000)))
+'''
