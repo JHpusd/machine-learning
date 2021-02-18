@@ -84,10 +84,10 @@ class DataFrame():
             file_rows = file.read().split('\n')
             for row in file_rows:
                 full_split_file.append(row.split(', '))
-        if header == True:
+        if header:
             for element in full_split_file[0]:
                 col_names.append(element)
-        elif header == False:
+        else:
             for i in range(len(full_split_file[0])):
                 col_names.append(i)
         for i in range(len(col_names)):
