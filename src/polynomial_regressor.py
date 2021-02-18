@@ -48,7 +48,6 @@ class PolynomialRegressor():
             if key not in input_dict and "^" in key:
                 keys = key.split("^")
                 input_dict[key] = input_dict[keys[0]] ** int(keys[1])
-        print("altered input_dict: " + str(input_dict))
 
         result = 0
         for key in self.coefficients:
