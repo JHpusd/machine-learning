@@ -23,7 +23,7 @@ class PolynomialRegressor():
             self.coefficients = self.calculate_coefficients()
             return
 
-        new_cols.remove('y')
+        new_cols.remove(dependent_var)
         for i in range(len(dataframe.to_array())):
             new_dict.append([])
             for n in range(1, self.degree + 1):
@@ -31,7 +31,7 @@ class PolynomialRegressor():
                     new_cols.append("x^" + str(n))
                 new_dict[i].append(dataframe.to_array()[i][0]**n)
             new_dict[i].append(dataframe.to_array()[i][1])
-        new_cols.append('y')
+        new_cols.append(dependent_var)
         self.df = DataFrame.from_array(new_dict, new_cols)
         self.coefficients = self.calculate_coefficients()
         return
