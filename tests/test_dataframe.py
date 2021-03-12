@@ -1,6 +1,8 @@
 import sys
 sys.path.append('src')
 from dataframe import DataFrame
+sys.path.append('kaggle/titanic')
+from parse_line import *
 
 data_dict = {
     'Pete': [1, 0, 1, 0],
@@ -103,7 +105,7 @@ assert df.to_array() ==  [[0, 0, 1, 0],
     [0, 8, 6, 0],
     [2, 2, 0, 4],
     [3, 4, 0, 12]]
-'''
+
 df = DataFrame.from_array(
     [[0, 0, [],               1],
     [0, 0, ['mayo'],          1],
@@ -143,5 +145,29 @@ assert df.to_array() == [[0, 0, 0, 0, 1],
 [5, 5, 1, 0, 0],
 [5, 5, 0, 1, 0],
 [5, 5, 1, 1, 0]]
-
-
+'''
+path_to_datasets = '/home/runner/machine-learning/kaggle/titanic/data/'
+filename = 'knowns.csv' 
+filepath = path_to_datasets + filename
+data_types = {
+    "PassengerId": int,
+    "Survived": int,
+    "Pclass": int,
+    "Name": str,
+    "Sex": str,
+    "Age": int,
+    "SibSp": int,
+    "Parch": int,
+    "Ticket": str,
+    "Fare": float,
+    "Cabin": str,
+    "Embarked": str
+}
+df = DataFrame.from_csv(filepath, True, data_types, parse_line)
+assert df.columns == [
+    'PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age',
+        'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
+assert df.to_array()[:3] == [
+    [1, 0, 3, '"Braund, Mr. Owen Harris"', "male", 22, 1, 0, "A/5 21171", 7.25, "", "S"],
+        [2, 1, 1, '"Cumings, Mrs. John Bradley (Florence Briggs Thayer)"', "female", 38, 1, 0, "PC 17599", 71.2833, "C85", "C"],
+            [3, 1, 3, '"Heikkinen, Miss. Laina"', "female", 26, 0, 0, "STON/O2. 3101282", 7.925, "", "S"]]

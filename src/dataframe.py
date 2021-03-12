@@ -76,26 +76,49 @@ class DataFrame():
             return DataFrame.from_array(result_list[::-1], self.columns)
     
     @classmethod
-    def from_csv(cls, pathing, header):
+    def from_csv(cls, pathing, header, datatypes=None, parser=None):
         data = {}
         col_names = []
         with open(pathing, "r") as file:
             full_split_file = []
             file_rows = file.read().split('\n')
             for row in file_rows:
-                full_split_file.append(row.split(', '))
-        if header:
+                if parser == None:
+                    full_split_file.append(row.split(', '))
+                else:
+                    full_split_file.append(parser(row))
+
+        if header and datatypes == None:
             for element in full_split_file[0]:
                 col_names.append(element)
-        else:
+        elif not header and datatypes == None:
             for i in range(len(full_split_file[0])):
                 col_names.append(i)
+        elif header and datatypes != None:
+            assert len(full_split_file[0]) == len(datatypes), "number of cols error"
+            for i in range(len(full_split_file[0])):
+                data_names = [key for key in datatypes]
+                assert full_split_file[0][i] == data_names[i], "col name error"
+                col_names.append(full_split_file[0][i])
+        elif not header and datatypes != None:
+            assert len(full_split_file[0]) == len(datatypes), "number of cols error"
+            for key in datatypes:
+                col_names.append(key)
+
         for i in range(len(col_names)):
             data[col_names[i]] = []
             for j in range(len(full_split_file)):
-                data[col_names[i]].append(full_split_file[j][i])
-        for key in data:
-            data[key] = data[key][1:]
+                if header and j == 0:
+                    continue
+                if datatypes == None:
+                    data[col_names[i]].append(full_split_file[j][i])
+                else:
+                    data_types = [datatypes[key] for key in datatypes]
+                    data_type = data_types[i]
+                    try:
+                        data[col_names[i]].append(data_type(full_split_file[j][i]))
+                    except ValueError:
+                        data[col_names[i]].append(None)
         return cls(data, col_names)
     
     def create_interaction_terms(self, col_1, col_2):
