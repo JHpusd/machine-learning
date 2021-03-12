@@ -155,7 +155,7 @@ data_types = {
     "Pclass": int,
     "Name": str,
     "Sex": str,
-    "Age": int,
+    "Age": float,
     "SibSp": int,
     "Parch": int,
     "Ticket": str,
