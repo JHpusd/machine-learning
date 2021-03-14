@@ -156,4 +156,24 @@ class DataFrame():
             new_data_dict[var] = [0 if var not in i else 1 for i in target_row]
         
         return DataFrame(new_data_dict, new_cols)
+    
+    def change_col_type(self, col_name, new_col_type):
+        new_col = []
+        for item in self.data_dict[col_name]:
+            if item == None:
+                new_col.append(None)
+                continue
+            try:
+                new_col.append(new_col_type(item))
+            except ValueError:
+                if '.' in item:
+                    print(self.data_dict[col_name].index(item))
+                    print('Trying to turn a float into an integer?')
+                    return None
+                else:
+                    new_col.append(None)
+            except TypeError:
+                print('New type is not compatible')
+                return None
+        self.data_dict[col_name] = new_col
 
