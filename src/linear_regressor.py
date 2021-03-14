@@ -25,7 +25,7 @@ class LinearRegressor():
                     sys_eq_matrix[i].append(1)
                 if j != d_index:
                     sys_eq_matrix[i].append(df_array[i][j])
-                elif j == d_index:
+                else:
                     continue
         sys_matrix = Matrix(sys_eq_matrix)
         trans_sys_matrix = sys_matrix.transpose()
@@ -37,7 +37,7 @@ class LinearRegressor():
         for i in range(len(no_dv_columns) + 1):
             if i == 0:
                 coeff_dict['constant'] = coeff_matrix.elements[i][0]
-            elif i != 0:
+            else:
                 coeff_dict[no_dv_columns[i-1]] = coeff_matrix.elements[i][0]
         return coeff_dict
 
