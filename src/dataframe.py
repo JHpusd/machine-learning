@@ -13,7 +13,7 @@ class DataFrame():
             counter += 1
         return result
     
-    def select_columns(self, column_order):
+    def select(self, column_order):
         return DataFrame(self.data_dict, column_order)
     
     def select_rows(self, row_order):
@@ -48,7 +48,7 @@ class DataFrame():
             result_dict[columns[i]] = row[i]
         return result_dict
     
-    def select_rows_where(self, function):
+    def where(self, function):
         array_copy = self.to_array()
         result_list = []
         for data_row in array_copy:
@@ -72,8 +72,7 @@ class DataFrame():
             array_copy.remove(min_row)
         if ascent:
             return DataFrame.from_array(result_list, self.columns)
-        else:
-            return DataFrame.from_array(result_list[::-1], self.columns)
+        return DataFrame.from_array(result_list[::-1], self.columns)
     
     @classmethod
     def from_csv(cls, pathing, header, datatypes=None, parser=None):
