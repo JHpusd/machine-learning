@@ -13,6 +13,7 @@ class DataFrame():
             counter += 1
         return result
     
+    # sql related
     def select(self, column_order):
         return DataFrame(self.data_dict, column_order)
     
@@ -48,6 +49,7 @@ class DataFrame():
             result_dict[columns[i]] = row[i]
         return result_dict
     
+    #sql related
     def where(self, function):
         array_copy = self.to_array()
         result_list = []
@@ -59,7 +61,8 @@ class DataFrame():
                 continue
         return DataFrame.from_array(result_list, self.columns)
     
-    def order_by(self, attribute, ascent):
+    # sql related
+    def order_by(self, attribute, ascent=True):
         array_copy = self.to_array()
         att_index = self.columns.index(attribute)
         result_list = []
@@ -175,4 +178,48 @@ class DataFrame():
                 print('New type is not compatible')
                 return None
         self.data_dict[col_name] = new_col
+    
+    # sql related
+    def group_by(self, attribute):
+        data = self.to_array()
+        new_data_dict = {}
+        att_groups = []
+        for item in self.data_dict[attribute]:
+            if item not in att_groups:
+                att_groups.append(item)
+        col_copy = [col for col in self.columns]
+        col_copy.remove(attribute)
+        col_copy.insert(0, attribute)
+        for col in col_copy:
+            col_index = self.columns.index(col)
+            if col == attribute:
+                new_data_dict[col] = att_groups
+                continue
+            new_col = []
+            for group in att_groups:
+                grouped_elems = [row[col_index] for row in data if group in row]
+                new_col.append(grouped_elems)
+            new_data_dict[col] = new_col
+        return DataFrame(new_data_dict, col_copy)
+    
+    # sql related
+    def aggregate(self, colname, how):
+        if how not in ['count', 'max', 'min', 'sum', 'avg']:
+            print('invalid input for "how"')
+            return None
+        data_copy = {key:self.data_dict[key] for key in self.data_dict}
+        for group in data_copy[colname]:
+            assert list(group) == group, "inputted column isn't in list format"
+        if how == 'count':
+            data_copy[colname] = [len(group) for group in data_copy[colname]]
+        elif how == 'max':
+            data_copy[colname] = [max(group) for group in data_copy[colname]]
+        elif how == 'min':
+            data_copy[colname] = [min(group) for group in data_copy[colname]]
+        elif how == 'sum':
+            data_copy[colname] = [sum(group) for group in data_copy[colname]]
+        elif how == 'avg':
+            data_copy[colname] = [sum(group)/len(group) for group in data_copy[colname]]
+        return DataFrame(data_copy, self.columns)
+
 
