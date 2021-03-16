@@ -14,24 +14,15 @@ locations = [(0,0), (6,1), (2,2), (5,3), (4,4), (7,5), (1,6), (2,6)]
 show_board(locations)
 '''
 def same_row(point_1, point_2):
-    if point_1[0] == point_2[0]:
-        return True
-    else:
-        return False
+    return point_1[0] == point_2[0]
 
 def same_col(point_1, point_2):
-    if point_1[1] == point_2[1]:
-        return True
-    else:
-        return False
+    return point_1[1] == point_2[1]
 
 def same_diag(point_1, point_2):
     delta_y = point_2[1] - point_1[1]
     delta_x = point_2[0] - point_1[0]
-    if delta_y/delta_x == 1 or delta_y/delta_x == -1:
-        return True
-    else:
-        return False
+    return delta_y/delta_x == 1 or delta_y/delta_x == -1
 
 def calc_cost(locations):
     cost = 0
