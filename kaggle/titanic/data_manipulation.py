@@ -1,3 +1,9 @@
+import sys
+sys.path.append('src')
+from dataframe import DataFrame
+sys.path.append('kaggle/titanic')
+from parse_line import *
+
 path_to_datasets = '/home/runner/machine-learning/kaggle/titanic/data/'
 filename = 'knowns.csv' 
 filepath = path_to_datasets + filename
@@ -85,4 +91,15 @@ df.data_dict['TicketNumber'] = ticket_num
 df.change_col_type('TicketNumber', int)
 df.columns[ticket_index] = 'TicketType'
 df.columns.insert(ticket_index+1, 'TicketNumber')
+
+# implementing sql methods
+'''
+pclass = df.group_by("Pclass")
+print(pclass.aggregate("Survived", "avg").select(["Pclass", "Survived"]).to_array())
+print(pclass.aggregate("Survived", "count").select(["Pclass", "Survived"]).to_array())
+
+sex = df.group_by("Sex")
+print(sex.aggregate("Survived", "avg").select(["Sex", "Survived"]).to_array())
+print(sex.aggregate("Survived", "count").select(["Sex", "Survived"]).to_array())
+'''
 

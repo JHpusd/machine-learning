@@ -184,6 +184,7 @@ class DataFrame():
         data = self.to_array()
         new_data_dict = {}
         att_groups = []
+        att_index = self.columns.index(attribute)
         for item in self.data_dict[attribute]:
             if item not in att_groups:
                 att_groups.append(item)
@@ -197,7 +198,7 @@ class DataFrame():
                 continue
             new_col = []
             for group in att_groups:
-                grouped_elems = [row[col_index] for row in data if group in row]
+                grouped_elems = [row[col_index] for row in data if row[att_index]==group]
                 new_col.append(grouped_elems)
             new_data_dict[col] = new_col
         return DataFrame(new_data_dict, col_copy)
