@@ -19,26 +19,19 @@ class LinearRegressor():
         d_column = Matrix(d_column)
         sys_eq_matrix = []
         for i in range(len(df_array)):
-            sys_eq_matrix.append([])
+            sys_eq_matrix.append([1])
             for j in range(len(df_array[0])):
-                if j == 0:
-                    sys_eq_matrix[i].append(1)
                 if j != d_index:
                     sys_eq_matrix[i].append(df_array[i][j])
-                else:
-                    continue
         sys_matrix = Matrix(sys_eq_matrix)
         trans_sys_matrix = sys_matrix.transpose()
         inv_sys_matrix = (trans_sys_matrix @ sys_matrix).inverse()
         coeff_matrix = inv_sys_matrix @ trans_sys_matrix @ d_column
-        coeff_dict = {}
+        coeff_dict = {'constant':coeff_matrix.elements[i][0]}
         no_dv_columns = [col for col in self.df.columns]
         no_dv_columns.remove(self.dv)
-        for i in range(len(no_dv_columns) + 1):
-            if i == 0:
-                coeff_dict['constant'] = coeff_matrix.elements[i][0]
-            else:
-                coeff_dict[no_dv_columns[i-1]] = coeff_matrix.elements[i][0]
+        for i in range(1, len(no_dv_columns) + 1):
+            coeff_dict[no_dv_columns[i-1]] = coeff_matrix.elements[i][0]
         return coeff_dict
 
     def predict(self, input_dict):
