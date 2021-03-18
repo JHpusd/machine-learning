@@ -221,5 +221,17 @@ class DataFrame():
         elif how == 'avg':
             data_copy[colname] = [sum(group)/len(group) for group in data_copy[colname]]
         return DataFrame(data_copy, self.columns)
+    
+    # sql related
+    def query(self, order):
+        assert "SELECT" in order, "invalid query"
+        columns = order.split(" ")
+        columns.remove("SELECT")
+        for i in range(len(columns)):
+            if "," in columns[i]:
+                new_col = list(columns[i])
+                new_col.remove(",")
+                columns[i] = "".join(x for x in new_col)
+        return self.select(columns)
 
 

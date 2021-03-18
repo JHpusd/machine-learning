@@ -145,7 +145,7 @@ assert df.to_array() == [[0, 0, 0, 0, 1],
 [5, 5, 1, 0, 0],
 [5, 5, 0, 1, 0],
 [5, 5, 1, 1, 0]]
-'''
+
 df = DataFrame.from_array(
     [['Kevin', 'Fray', 5],
     ['Charles', 'Trapp', 17],
@@ -200,3 +200,12 @@ assert df.group_by('name').aggregate('score', 'sum').to_array() == [
 assert df.group_by('name').aggregate('score', 'avg').to_array() == [
     ['Kevin Fray', [52, 53], 90], ['Charles Trapp', [52, 53], 85],
     ['Anna Smith', [52, 53, 54], 70], ['Sylvia Mendez', [52, 53, 54], 90]]
+'''
+df = DataFrame.from_array(
+    [['Kevin', 'Fray', 5],
+    ['Charles', 'Trapp', 17],
+    ['Anna', 'Smith', 13],
+    ['Sylvia', 'Mendez', 9]],
+    columns = ['firstname', 'lastname', 'age'])
+assert df.query('SELECT firstname, age').to_array() == [
+    ['Kevin', 5], ['Charles', 17], ['Anna', 13], ['Sylvia', 9]]
