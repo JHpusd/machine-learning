@@ -3,7 +3,6 @@ sys.path.append('src')
 from linear_regressor import *
 from matrix import *
 from dataframe import *
-from logistic_regressor import *
 
 class PolynomialRegressor():
     def __init__(self, degree):
