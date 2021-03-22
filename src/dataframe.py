@@ -6,10 +6,10 @@ class DataFrame():
     def to_array(self):
         result = []
         counter = 0
-        for j in range(len(self.data_dict[self.columns[0]])):
+        for col_num in range(len(self.data_dict[self.columns[0]])):
             result.append([])
             for key in self.columns:
-                result[counter].append(self.data_dict[key][j])
+                result[counter].append(self.data_dict[key][col_num])
             counter += 1
         return result
     
