@@ -62,7 +62,7 @@ class DataFrame():
         return DataFrame.from_array(result_list, self.columns)
     
     # sql related
-    def order_by(self, attribute, ascent=True):
+    def order_by(self, attribute, up_or_down):
         array_copy = self.to_array()
         att_index = self.columns.index(attribute)
         result_list = []
@@ -73,7 +73,7 @@ class DataFrame():
                     min_row = data_row
             result_list.append(min_row)
             array_copy.remove(min_row)
-        if ascent:
+        if up_or_down == "ASC":
             return DataFrame.from_array(result_list, self.columns)
         return DataFrame.from_array(result_list[::-1], self.columns)
     
@@ -224,15 +224,34 @@ class DataFrame():
         return DataFrame(data_copy, self.columns)
     
     # sql related
-    def query(self, order):
-        assert "SELECT" in order, "invalid query"
-        columns = order.split(" ")
+    def query(self, statement):
+        assert "SELECT" in statement, "invalid query"
+        columns = statement.split(" ")
+        orders = []
+        if "ORDER" in columns:
+            orders = columns[columns.index("ORDER"):]
+            orders.remove("ORDER")
+            orders.remove("BY")
+            columns = columns[:columns.index("ORDER")]
         columns.remove("SELECT")
         for i in range(len(columns)):
             if "," in columns[i]:
                 new_col = list(columns[i])
                 new_col.remove(",")
                 columns[i] = "".join(x for x in new_col)
-        return self.select(columns)
+        for i in range(len(orders)):
+            if "," in orders[i]:
+                new_ord = list(orders[i])
+                new_ord.remove(",")
+                orders[i] = "".join(x for x in new_ord)
+        paired_orders = []
+        for i in range(len(orders)):
+            if i%2 == 1:
+                paired_orders.append((orders[i-1], orders[i]))
+        
+        result = self
+        for pair in paired_orders[::-1]:
+            result = result.order_by(pair[0], pair[1])
+        return result.select(columns)
 
 
