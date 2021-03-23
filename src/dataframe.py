@@ -57,8 +57,6 @@ class DataFrame():
             row_dict = self.convert_row_from_array_to_dict(data_row, self.columns)
             if function(row_dict):
                 result_list.append(data_row)
-            else:
-                continue
         return DataFrame.from_array(result_list, self.columns)
     
     # sql related
