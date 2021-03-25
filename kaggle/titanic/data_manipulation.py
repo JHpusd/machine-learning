@@ -141,7 +141,7 @@ age_group = new_df.select(["Age","Survived"]).where(lambda row: 70 < row["Age"] 
 avg = sum([pair[1] for pair in age_group.to_array()])/len(age_group.to_array())
 print("70-80 avg survival rate: " + str(avg))
 print("People 70-80: "+ str(len(age_group.to_array())))
-'''
+
 fare_index = df.columns.index("Fare")
 fare_edited = []
 for row in df.to_array():
@@ -177,3 +177,24 @@ fare_group = new_df.select(['Fare', "Survived"]).where(lambda row: 200 < row['Fa
 avg = sum([pair[1] for pair in fare_group.to_array()])/len(fare_group.to_array())
 print("fare 200+ avg survival rate: " + str(avg))
 print("number of people fare 200+: " + str(len(fare_group.to_array())))
+'''
+for i in range(len(df.data_dict['Sex'])):
+    if df.data_dict['Sex'][i] == "male":
+        df.data_dict['Sex'][i] = 0
+        continue
+    df.data_dict['Sex'][i] = 1
+data_types['Sex'] = int
+
+no_none_age = [age for age in df.data_dict['Age'] if age != None]
+avg_age = sum(no_none_age)/len(no_none_age)
+for i in range(len(df.data_dict['Age'])):
+    if df.data_dict['Age'][i] == None:
+        df.data_dict['Age'][i] == avg_age
+
+sibsp_index = df.columns.index('SibSp')
+df.columns.insert(sibsp_index+1, 'SibSp=0')
+df.data_dict['SibSp=0'] = [1 if sibsp==0 else 0 for sibsp in df.data_dict['SibSp']]
+data_types['SibSp=0'] = int
+
+parch_index = df.columns.index('Parch')
+
