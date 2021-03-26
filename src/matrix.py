@@ -53,8 +53,7 @@ class Matrix():
         for i in range(self.num_rows):
             for j in range(input_matrix.num_cols):
                 for k in range(input_matrix.num_rows):
-                    result[i][j] += (
-                        self.elements[i][k] * input_matrix.elements[k][j])
+                    result[i][j] += (self.elements[i][k] * input_matrix.elements[k][j])
         return Matrix(result)
 
     def transpose(self):

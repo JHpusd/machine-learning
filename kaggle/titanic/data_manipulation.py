@@ -1,6 +1,7 @@
 import sys
 sys.path.append('src')
 from dataframe import DataFrame
+from linear_regressor import *
 sys.path.append('kaggle/titanic')
 from parse_line import *
 
@@ -183,18 +184,91 @@ for i in range(len(df.data_dict['Sex'])):
         df.data_dict['Sex'][i] = 0
         continue
     df.data_dict['Sex'][i] = 1
-data_types['Sex'] = int
 
 no_none_age = [age for age in df.data_dict['Age'] if age != None]
 avg_age = sum(no_none_age)/len(no_none_age)
 for i in range(len(df.data_dict['Age'])):
     if df.data_dict['Age'][i] == None:
-        df.data_dict['Age'][i] == avg_age
+        df.data_dict['Age'][i] = avg_age
 
 sibsp_index = df.columns.index('SibSp')
 df.columns.insert(sibsp_index+1, 'SibSp=0')
 df.data_dict['SibSp=0'] = [1 if sibsp==0 else 0 for sibsp in df.data_dict['SibSp']]
-data_types['SibSp=0'] = int
 
 parch_index = df.columns.index('Parch')
+df.columns[parch_index] = 'Parch=0'
+df.data_dict['Parch=0'] = [1 if parch==0 else 0 for parch in df.data_dict['Parch']]
+del df.data_dict['Parch']
 
+df.data_dict['CabinType'] = [['CabinType='+t] if t!='' else ['CabinType=None'] for t in df.data_dict['CabinType']]
+df = df.create_dummy_variables('CabinType')
+
+df.data_dict['Embarked'] = [['Embarked='+e] if e!='' else ['Embarked=None'] for e in df.data_dict['Embarked']]
+df = df.create_dummy_variables('Embarked')
+
+def get_accuracy(input_set, regressor, columns):
+    accuracy = 0
+    dv_index = columns.index(regressor.dv)
+    for i in range(len(input_set)):
+        predictions = {}
+        for col in columns:
+            if col != regressor.dv:
+                predictions[col] = input_set[i][columns.index(col)]
+        if round(regressor.predict(predictions) + 0.01) == input_set[i][dv_index]:
+            accuracy += 1
+    return accuracy/len(input_set)
+
+test_1 = df.select(['Sex', 'Survived'])
+training_set = [row for row in test_1.to_array()[:500]]
+train_df = DataFrame.from_array(training_set, test_1.columns)
+test_set = [row for row in test_1.to_array()[500:]]
+lin_reg_1 = LinearRegressor(train_df, 'Survived')
+train_acc = get_accuracy(training_set, lin_reg_1, test_1.columns)
+print(lin_reg_1.coefficients)
+print("Test 1 training accuracy: " + str(train_acc))
+test_acc = get_accuracy(test_set, lin_reg_1, test_1.columns)
+print("Test 1 testing accuracy: " + str(test_acc) + '\n')
+
+test_2 = df.select(['Sex', 'Survived', 'Pclass'])
+training_set = [row for row in test_2.to_array()[:500]]
+train_df = DataFrame.from_array(training_set,test_2.columns)
+test_set = [row for row in test_2.to_array()[500:]]
+lin_reg_2 = LinearRegressor(train_df, 'Survived')
+train_acc = get_accuracy(training_set, lin_reg_2, test_2.columns)
+print(lin_reg_2.coefficients)
+print("Test 2 training accuracy: " + str(train_acc))
+test_acc = get_accuracy(test_set, lin_reg_2, test_2.columns)
+print("Test 2 testing accuracy: " + str(test_acc) + '\n')
+
+test_3 = df.select(['Survived','Sex','Pclass','Fare','Age','SibSp','SibSp=0','Parch=0'])
+training_set = [row for row in test_3.to_array()[:500]]
+train_df = DataFrame.from_array(training_set, test_3.columns)
+test_set = [row for row in test_3.to_array()[500:]]
+lin_reg_3 = LinearRegressor(train_df, 'Survived')
+train_acc = get_accuracy(training_set, lin_reg_3, test_3.columns)
+print(lin_reg_3.coefficients)
+print("Test 3 training accuracy: " + str(train_acc))
+test_acc = get_accuracy(test_set, lin_reg_3, test_3.columns)
+print("Test 3 testing accuracy: " + str(test_acc) + '\n')
+
+test_4 = df.select(['Survived','Sex','Pclass','Fare','Age','SibSp','SibSp=0','Parch=0','Embarked=C','Embarked=None','Embarked=Q','Embarked=S'])
+training_set = [row for row in test_4.to_array()[:500]]
+train_df = DataFrame.from_array(training_set, test_4.columns)
+test_set = [row for row in test_4.to_array()[500:]]
+lin_reg_4 = LinearRegressor(train_df, 'Survived')
+train_acc = get_accuracy(training_set, lin_reg_4, test_4.columns)
+print(lin_reg_4.coefficients)
+print("Test 4 training accuracy: " + str(train_acc))
+test_acc = get_accuracy(test_set, lin_reg_4, test_4.columns)
+print("Test 4 testing accuracy: " + str(test_acc) + '\n')
+
+test_5 = df.select(['Survived','Sex','Pclass','Fare','Age','SibSp','SibSp=0','Parch=0','Embarked=C','Embarked=None','Embarked=Q','Embarked=S','CabinType=A','CabinType=B','CabinType=C','CabinType=D','CabinType=E','CabinType=F','CabinType=G','CabinType=None'])
+training_set = [row for row in test_5.to_array()[:500]]
+train_df = DataFrame.from_array(training_set, test_5.columns)
+test_set = [row for row in test_5.to_array()[500:]]
+lin_reg_5 = LinearRegressor(train_df, 'Survived')
+train_acc = get_accuracy(training_set, lin_reg_5, test_5.columns)
+print(lin_reg_5.coefficients)
+print("Test 5 training accuracy: " + str(train_acc))
+test_acc = get_accuracy(test_set, lin_reg_5, test_5.columns)
+print("Test 5 testing accuracy: " + str(test_acc) + '\n')

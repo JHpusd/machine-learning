@@ -27,7 +27,7 @@ class LinearRegressor():
         trans_sys_matrix = sys_matrix.transpose()
         inv_sys_matrix = (trans_sys_matrix @ sys_matrix).inverse()
         coeff_matrix = inv_sys_matrix @ trans_sys_matrix @ d_column
-        coeff_dict = {'constant':coeff_matrix.elements[i][0]}
+        coeff_dict = {'constant':coeff_matrix.elements[0][0]}
         no_dv_columns = [col for col in self.df.columns]
         no_dv_columns.remove(self.dv)
         for i in range(1, len(no_dv_columns) + 1):
