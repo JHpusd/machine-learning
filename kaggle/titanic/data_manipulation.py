@@ -272,3 +272,14 @@ print(lin_reg_5.coefficients)
 print("Test 5 training accuracy: " + str(train_acc))
 test_acc = get_accuracy(test_set, lin_reg_5, test_5.columns)
 print("Test 5 testing accuracy: " + str(test_acc) + '\n')
+
+test_6 = df.select(['Survived','Sex','Pclass','Fare','Age','SibSp','SibSp=0','Parch=0','Embarked=C','Embarked=None','Embarked=Q','Embarked=S','CabinType=A','CabinType=B','CabinType=C','CabinType=D','CabinType=E','CabinType=F','CabinType=G','CabinType=None','CabinType=T'])
+training_set = [row for row in test_6.to_array()[:500]]
+train_df = DataFrame.from_array(training_set, test_6.columns)
+test_set = [row for row in test_6.to_array()[500:]]
+lin_reg_6 = LinearRegressor(train_df, 'Survived')
+train_acc = get_accuracy(training_set, lin_reg_6, test_6.columns)
+print(lin_reg_6.coefficients)
+print("Test 5 training accuracy: " + str(train_acc))
+test_acc = get_accuracy(test_set, lin_reg_6, test_6.columns)
+print("Test 5 testing accuracy: " + str(test_acc) + '\n')
