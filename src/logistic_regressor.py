@@ -10,7 +10,13 @@ class LogisticRegressor():
         self.df = data
         self.dv = dependent_variable
         self.up_bound = upper_bound
-        self.coefficients = self.calc_coefficients()
+        try:
+            self.coefficients = self.calc_coefficients()
+        except:
+            coeffs = list(self.df.columns)
+            coeffs.remove(self.dv)
+            coeffs.insert(0, 'constant')
+            self.coefficients = {item:None for item in coeffs}
 
     def calc_coefficients(self):
         df_transform = {key:self.df.data_dict[key] for key in self.df.data_dict}
@@ -37,3 +43,53 @@ class LogisticRegressor():
             else:
                 coeff_sum += self.coefficients[key]
         return self.up_bound/(1 + math.exp(coeff_sum))
+    
+    def copy(self):
+        return LogisticRegressor(self.df, self.dv, self.up_bound)
+
+    def calc_rss(self):
+        rss = 0
+        df_arr = self.df.to_array()
+        dv_index = self.df.columns.index(self.dv)
+        no_dv_cols = list(self.df.columns)
+        no_dv_cols.remove(self.dv)
+        for row in df_arr:
+            dv = row[dv_index]
+            del row[dv_index]
+            predict = {no_dv_cols[index]:row[index] for index in range(len(no_dv_cols))}
+            prediction = self.predict(predict)
+            rss += (prediction - dv) ** 2
+        return rss
+    
+    def set_coefficients(self, new_coeffs):
+        for key in self.coefficients:
+            if key in new_coeffs:
+                self.coefficients[key] = new_coeffs[key]
+    
+    def calc_gradient(self, delta):
+        logreg_1 = self.copy()
+        logreg_2 = self.copy()
+        coeff_copy = dict(self.coefficients)
+        gradients = {}
+        for key in coeff_copy:
+            coeffs_1 = dict(coeff_copy)
+            coeffs_2 = dict(coeff_copy)
+            coeffs_1[key] += 0.5 * delta
+            coeffs_2[key] -= 0.5 * delta
+            logreg_1.set_coefficients(coeffs_1)
+            logreg_2.set_coefficients(coeffs_2)
+            derivative = (logreg_1.calc_rss() - logreg_2.calc_rss()) / delta
+            gradients[key] = derivative
+        return gradients
+
+    def gradient_descent(self, alpha, delta, num_steps, debug_mode=False):
+        for i in range(num_steps):
+            gradients = self.calc_gradient(delta)
+            if debug_mode:
+                print("Step {}:".format(i))
+                print("\tGradient: "+str(gradients))
+                print("\tCoeffs: "+str(self.coefficients))
+                print("\tRSS: "+str(self.calc_rss()))
+            for key in gradients:
+                self.coefficients[key] -= gradients[key] * alpha
+

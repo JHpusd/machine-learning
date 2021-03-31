@@ -12,6 +12,7 @@ df = DataFrame.from_array(
     [3,1],
     [4,1]],
     ['x', 'y'])
+
 plt.style.use('bmh')
 plt.plot([row[0] for row in df.to_array()], [row[1] for row in df.to_array()],'ro')
 
@@ -29,6 +30,7 @@ def log_reg_convert_zeros_and_ones(dataframe, dv, delta):
 df1 = log_reg_convert_zeros_and_ones(df, 'y', 0.1)
 logreg1 = LogisticRegressor(df1, 'y', 1)
 plt.plot([i*0.01 for i in range(401)], [logreg1.predict({'x':i*0.01}) for i in range(401)], label='0.1')
+print(logreg1.coefficients)
 
 df2 = log_reg_convert_zeros_and_ones(df, 'y', 0.01)
 logreg2 = LogisticRegressor(df2, 'y', 1)
@@ -41,5 +43,20 @@ plt.plot([i*0.01 for i in range(401)], [logreg3.predict({'x':i*0.01}) for i in r
 df4 = log_reg_convert_zeros_and_ones(df, 'y', 0.0001)
 logreg4 = LogisticRegressor(df4, 'y', 1)
 plt.plot([i*0.01 for i in range(401)], [logreg4.predict({'x':i*0.01}) for i in range(401)],label='0.0001')
+'''plt.legend(loc='upper left')
+plt.savefig('logistic_regressor_conversion.png')'''
+
+logreg = LogisticRegressor(df, 'y', 1)
+logreg.set_coefficients({'constant':0.5, 'x':0.5})
+
+alpha = 0.01
+delta = 0.01
+num_steps = 20000
+logreg.gradient_descent(alpha, delta, num_steps)
+print(logreg.coefficients)
+
+plt.style.use('bmh')
+plt.plot([row[0] for row in df.to_array()], [row[1] for row in df.to_array()],'ro')
+plt.plot([i*0.01 for i in range(401)], [logreg.predict({'x':i*0.01}) for i in range(401)], label='Gradient descent')
 plt.legend(loc='upper left')
-plt.savefig('logistic_regressor_conversion.png')
+plt.savefig('logistic_regressor_gradient_descended.png')
