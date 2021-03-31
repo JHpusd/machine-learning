@@ -89,7 +89,7 @@ class LogisticRegressor():
                 print("Step {}:".format(i))
                 print("\tGradient: "+str(gradients))
                 print("\tCoeffs: "+str(self.coefficients))
-                print("\tRSS: "+str(self.calc_rss()))
+                print("\tRSS: "+str(self.calc_rss())+"\n")
             for key in gradients:
                 self.coefficients[key] -= gradients[key] * alpha
 
