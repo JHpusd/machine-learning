@@ -50,4 +50,7 @@ print(log_reg.predict({
 }))
 '''
 
-
+df = DataFrame.from_array([[2,1], [3,0]], ['x', 'y'])
+test = LogisticRegressor(df, 'y', 1)
+test.set_coefficients({'constant': 1, 'x': 1})
+test.gradient_descent(0.1, 0.1, 100, True)
