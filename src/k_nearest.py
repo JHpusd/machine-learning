@@ -79,4 +79,33 @@ class KNearestNeighborsClassifier():
         for key in count_and_avg:
             count_and_avg[key][1] /= count_and_avg[key][0]
         return self.get_classification(count_and_avg)
+    
+    def leave_one_out_true_false(self, row_index):
+        print("k="+str(self.k)+", leave_out_index="+str(row_index)+": ",end="")
+        copy_cols = [col for col in self.cols if col != self.dv]
+        df_copy = self.df[copy_cols]
+
+        classification = self.df[self.dv].iloc[[row_index]].to_numpy().tolist()[0]
+        values = df_copy.iloc[[row_index]].to_numpy().tolist()[0]
+        observation = {copy_cols[i]:values[i] for i in range(len(copy_cols))}
+
+        fitting_df = self.df.drop([row_index])
+        fitting_df = fitting_df.reset_index(drop=True)
+        dummy_knn = KNearestNeighborsClassifier(self.k)
+        dummy_knn.fit(fitting_df, self.dv)
+        result_classification = dummy_knn.classify(observation)
+        
+        if result_classification == classification:
+            print("correct")
+            return True
+        print("incorrect")
+        return False
+    
+    def leave_one_out_accuracy(self):
+        df_arr = self.df.to_numpy().tolist()
+        correct = 0
+        for row_index in range(len(df_arr)):
+            if self.leave_one_out_true_false(row_index):
+                correct += 1
+        return correct / len(df_arr)
 
