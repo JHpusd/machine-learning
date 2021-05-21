@@ -76,3 +76,4 @@ plt.ylabel('sum squared error')
 plt.ylim(0, 0.4)
 plt.savefig('kmeans_clustering_elbow_method.png')
 print("Best number of clusters is 3")
+
