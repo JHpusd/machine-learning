@@ -45,7 +45,7 @@ class KNearestNeighborsClassifier():
             new_df_arr.append(smallest_dist_row)
             distance_df_arr.remove(smallest_dist_row)
         return pd.DataFrame(np.array(new_df_arr), columns=distance_df.columns.tolist())
-    
+
     def get_classification(self, count_and_avg):
         best_key = list(count_and_avg.keys())[0]
         largest_count = count_and_avg[best_key][0]
@@ -62,7 +62,7 @@ class KNearestNeighborsClassifier():
                     largest_count = count_and_avg[key][0]
                     smallest_avg = count_and_avg[key][1]
         return best_key
-    
+
     def classify(self, observation):
         distance_df = self.nearest_neighbors(observation)
         distance_index = distance_df.columns.tolist().index('Distance')
@@ -79,7 +79,7 @@ class KNearestNeighborsClassifier():
         for key in count_and_avg:
             count_and_avg[key][1] /= count_and_avg[key][0]
         return self.get_classification(count_and_avg)
-    
+
     def leave_one_out_true_false(self, row_index):
         print("k="+str(self.k)+", leave_out_index="+str(row_index)+": ",end="")
         copy_cols = [col for col in self.cols if col != self.dv]
@@ -100,7 +100,7 @@ class KNearestNeighborsClassifier():
             return True
         print("incorrect")
         return False
-    
+
     def leave_one_out_accuracy(self):
         df_arr = self.df.to_numpy().tolist()
         correct = 0
