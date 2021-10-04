@@ -24,23 +24,14 @@ def generate_clusters(x_centers, o_centers, num_points):
         all_elems.append(pair[0])
         all_elems.append(pair[1])
     largest_dist = max(all_elems)
-    # 60% chance to end up 0 to 1/4 of max
-    # 25% chance to end up 1/4 to 1/2 of max
-    # 10% chance to end up 1/2 to 3/4 of max
-    # 5% chance to end up 3/4 to max
-    weights = {60: (0,largest_dist/4), 85: (largest_dist/4,largest_dist/2), 95: (largest_dist/2, largest_dist*3/4), 100: (largest_dist*3/4, largest_dist)}
 
     for _ in range(num_points):
         x_center = x_centers[r.randint(0,len(x_centers)-1)]
         o_center = o_centers[r.randint(0,len(o_centers)-1)]
 
         for i in range(2):
-            r_dist = r.randint(1,100)
-            for key in weights:
-                if r_dist <= key:
-                    dist_range = weights[key]
-                    break
-            dist = r.randint(dist_range[0]*1000, dist_range[1]*1000) / 1000
+            dist_scalar = (r.randint(1,100)**3) / 1000000
+            dist = largest_dist * dist_scalar
             ang = m.pi*r.randint(0,360) / 180
             translation = (dist*m.cos(ang), dist*m.sin(ang))
             if i == 0:
