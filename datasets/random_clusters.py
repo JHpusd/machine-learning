@@ -9,7 +9,7 @@ def elem_add(a, b):
     assert len(a) == len(b), "different lengths"
     return [a[i]+b[i] for i in range(len(a))]
 
-def generate_clusters(x_centers, o_centers, num_points):
+def generate_clusters(x_centers, o_centers, p, num_points):
     # num_points is number of extra points for each type
     # total number of added points will be num_points * 2
     if type(x_centers) != list:
@@ -30,7 +30,7 @@ def generate_clusters(x_centers, o_centers, num_points):
         o_center = o_centers[r.randint(0,len(o_centers)-1)]
 
         for i in range(2):
-            dist_scalar = (r.randint(1,100)**3) / 1000000
+            dist_scalar = (r.randint(1,100)**p) / 100**p
             dist = largest_dist * dist_scalar
             ang = m.pi*r.randint(0,360) / 180
             translation = (dist*m.cos(ang), dist*m.sin(ang))
@@ -41,11 +41,11 @@ def generate_clusters(x_centers, o_centers, num_points):
     
     return points
 
-points = generate_clusters([(1,1), (4,4)], [(1,4), (4,1)], 100)
+points = generate_clusters([(1,1), (4,4)], [(1,4), (4,1)], 3, 100)
 plt.style.use('bmh')
 #print([p[0] for p in points['x']])
-plt.scatter([p[0] for p in points['x']], [p[1] for p in points['x']], color='red',s=10, label='x')
-plt.scatter([p[0] for p in points['o']], [p[1] for p in points['o']], color='#66ff00',s=10,label='o')
+plt.scatter([p[0] for p in points['x']], [p[1] for p in points['x']], color='red',s=10, marker='x',label='x')
+plt.scatter([p[0] for p in points['o']], [p[1] for p in points['o']], color='#66ff00',s=10,marker='o',label='o')
 plt.xlim(-8, 8)
 plt.ylim(-8, 8)
 plt.legend(loc='lower left')
