@@ -145,8 +145,8 @@ for min_size in min_sizes:
 
 plt.style.use('bmh')
 plt.plot(min_sizes, correct_percentages)
-plt.xlim(1,100)
-plt.ylim(0,1)
+#plt.xlim(1,100)
+#plt.ylim(0,1)
 plt.xlabel('min_size_to_split')
 plt.ylabel('5-fold accuracy')
 plt.savefig('min_size_vs_accuracy.png')
