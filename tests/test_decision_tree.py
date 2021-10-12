@@ -74,7 +74,7 @@ points = generate_clusters(x_clusters, o_clusters, 2, 4, 100)
 points_copy = points.copy()
 
 folds = mult_folds(5, points_copy)
-
+'''
 min_sizes = [1,2,5,10,15,20,30,50,100]
 correct_percentages = []
 for min_size in min_sizes:
@@ -94,3 +94,7 @@ plt.plot(min_sizes, correct_percentages)
 plt.xlabel('min_size_to_split')
 plt.ylabel('5-fold accuracy')
 plt.savefig('min_size_vs_accuracy.png')
+'''
+
+dt = DecisionTree(get_training(folds, folds[0]), 1)
+dt.fit(random=True)

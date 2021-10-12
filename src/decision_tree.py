@@ -1,6 +1,6 @@
 import math as m
 import random
-random.seed(1)
+#random.seed(1)
 
 class DecisionTree():
     def __init__(self, point_dict, min_size_to_split):
@@ -8,7 +8,7 @@ class DecisionTree():
         self.entropy = self.get_entropy()
         self.parent = None
         self.branches = []
-        self.best_split = None
+        self.set_split = None
         self.min_size = min_size_to_split
     
     def get_all_coords(self, point_dict=None):
@@ -101,24 +101,41 @@ class DecisionTree():
                 best_split = split
                 best_entropy = weighted_entropy
         if check:
-            self.best_split = best_split
+            self.set_split = best_split
         return best_split
     
-    def fit(self, d_tree=None):
+    def get_random_split(self, point_dict=None):
+        check = False
+        if point_dict == None:
+            check = True
+            point_dict = self.point_dict
+        all_splits = self.get_splits(point_dict)
+        rand_split = all_splits[random.randint(0,len(all_splits)-1)]
+        if check:
+            self.set_split = rand_split
+        return rand_split
+    
+    def fit(self, d_tree=None, random=False):
         if d_tree == None:
             d_tree = self
         if len(d_tree.branches) != 0 or len(d_tree.get_all_coords()) <= d_tree.min_size:
             return
-        d_tree.get_best_split()
-        d_tree.split(d_tree.best_split)
+        if random:
+            d_tree.get_random_split()
+        else:
+            d_tree.get_best_split()
+        d_tree.split(d_tree.set_split)
         branches = [branch for branch in d_tree.branches if branch.entropy != 0]
         next_branches = []
         while True:
             for branch in branches:
                 if len(branch.get_all_coords()) <= branch.min_size or len(set(branch.get_all_coords()))==1:
                     continue
-                branch.get_best_split()
-                branch.split(branch.best_split)
+                if random:
+                    branch.get_random_split()
+                else:
+                    branch.get_best_split()
+                branch.split(branch.set_split)
                 next_branches += [b for b in branch.branches if b.entropy != 0]
             branches = next_branches
             next_branches = []
@@ -144,8 +161,8 @@ class DecisionTree():
             d_tree = self
         d_tree.fit()
         while d_tree.entropy != 0 and len(d_tree.get_all_coords()) > d_tree.min_size and len(set(d_tree.get_all_coords()))!=1:
-            i = d_tree.best_split[0]
-            val = d_tree.best_split[1]
+            i = d_tree.set_split[0]
+            val = d_tree.set_split[1]
             if point[i] >= val:
                 d_tree = d_tree.branches[0]
             elif point[i] < val:
