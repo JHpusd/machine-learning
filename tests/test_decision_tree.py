@@ -1,6 +1,6 @@
 import sys, time
-from test_methods import *
 sys.path.append('src')
+from test_methods import *
 from decision_tree import *
 sys.path.append('datasets')
 from random_clusters import *
