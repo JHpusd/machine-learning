@@ -1,4 +1,5 @@
 import sys, time
+from test_methods import *
 sys.path.append('src')
 from decision_tree import *
 sys.path.append('datasets')
@@ -95,15 +96,3 @@ plt.xlabel('min_size_to_split')
 plt.ylabel('5-fold accuracy')
 plt.savefig('min_size_vs_accuracy.png')
 '''
-random.seed(1)
-dt1 = DecisionTree(get_training(folds, folds[0]), 1)
-dt1.fit(random=True)
-dt2 = DecisionTree(get_training(folds, folds[0]), 1)
-dt2.fit()
-
-random.seed(1)
-assert dt1.predict((1,1)) == dt2.predict((1,1))
-assert dt1.predict((1,2)) == dt2.predict((1,2))
-random.seed(1)
-assert dt1.predict((4,4)) == dt2.predict((4,4))
-assert dt1.predict((3,4)) == dt2.predict((3,4))
