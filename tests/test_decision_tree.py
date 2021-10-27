@@ -1,4 +1,5 @@
 import sys, time
+from sklearn.tree import DecisionTreeClassifier
 sys.path.append('src')
 from test_methods import *
 from decision_tree import *
@@ -75,9 +76,11 @@ points = generate_clusters(x_clusters, o_clusters, 2, 4, 100)
 points_copy = points.copy()
 
 folds = mult_folds(5, points_copy)
+
+min_sizes = [2,5,10,15,20,30,50,100]
 '''
-min_sizes = [1,2,5,10,15,20,30,50,100]
 correct_percentages = []
+
 for min_size in min_sizes:
     avg_correct = 0
     for fold in folds:
@@ -96,3 +99,33 @@ plt.xlabel('min_size_to_split')
 plt.ylabel('5-fold accuracy')
 plt.savefig('min_size_vs_accuracy.png')
 '''
+# using sklearn
+correct_percent = []
+for min_size in min_sizes:
+    folds_correct_avg = 0
+    for fold in folds:
+        train = point_dict_to_lists(get_training(folds, fold))
+        test = point_dict_to_lists(fold)
+        X = train[0]
+        y = train[1]
+        x_test = test[0]
+        y_test = test[1]
+        dt = DecisionTreeClassifier(min_samples_split=min_size)
+        dt = dt.fit(X, y)
+
+        test_correct = 0
+        predicts = dt.predict(x_test)
+        for i in range(len(y_test)):
+            classif = y_test[i]
+            prediction = predicts[i]
+            if prediction == classif:
+                test_correct += 1
+                
+        folds_correct_avg += test_correct/len(x_test)
+    correct_percent.append(folds_correct_avg/5)
+
+plt.style.use('bmh')
+plt.plot(min_sizes, correct_percent)
+plt.xlabel('min_size_to_split')
+plt.ylabel('5-fold accuracy')
+plt.savefig('sklearn_min_size_vs_accuracy.png')

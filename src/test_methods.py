@@ -61,3 +61,12 @@ def get_percent(percent_decimal, point_dict):
     assert percent_decimal <= 1, "percent needs to be decimal"
     size = round(len(get_all_vals(point_dict)) * percent_decimal)
     return random_fold(point_dict, size)
+
+def point_dict_to_lists(point_dict):
+    y = []
+    x = []
+    for key in list(point_dict.keys()):
+        for pair in point_dict[key]:
+            y.append(key)
+            x.append(list(pair))
+    return (x,y)

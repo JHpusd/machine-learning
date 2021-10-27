@@ -17,7 +17,7 @@ def generate_clusters(x_centers, o_centers, p, max_dist, num_points):
         x_centers = [x_centers]
     if type(o_centers) != list:
         o_ceters = [o_centers]
-    points = {'x':[], 'o':[]}
+    points = {1:[], 2:[]}
 
     for _ in range(num_points):
         x_center = x_centers[r.randint(0,len(x_centers)-1)]
@@ -29,9 +29,9 @@ def generate_clusters(x_centers, o_centers, p, max_dist, num_points):
             ang = m.pi*r.randint(0,360) / 180
             translation = (dist*m.cos(ang), dist*m.sin(ang))
             if i == 0:
-                points['x'].append(elem_add(x_center, translation))
+                points[1].append(elem_add(x_center, translation))
             elif i == 1:
-                points['o'].append(elem_add(o_center, translation))
+                points[2].append(elem_add(o_center, translation))
     
     return points
 
