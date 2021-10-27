@@ -70,5 +70,3 @@ plt.plot(num_trees, correct_percent)
 plt.xlabel('num trees')
 plt.ylabel('5-fold accuracy')
 plt.savefig('sklearn_random_forest.png')
-
-
