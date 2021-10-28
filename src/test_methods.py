@@ -70,3 +70,4 @@ def point_dict_to_lists(point_dict):
             y.append(key)
             x.append(list(pair))
     return (x,y)
+
