@@ -24,6 +24,9 @@ def gradient_desc(points, drrs_da, drrs_db, a, b, l_rate, steps):
     print(f'final rss: {rss(lambda x: a*b**x, points)}\n')
     return (a,b)
 
-print(gradient_desc(points, drrs_da, drrs_db, 1.1836141722222375, 1.5231327933344094, 0.0000001, 10000000))
+#print(gradient_desc(points, drrs_da, drrs_db, 1.1836141722222375, 1.5231327933344094, 0.0000001, 10000000))
 
 # have l_rate * steps = 1 to have optimal rss
+
+test = 'hello'
+print(test.split(''))
