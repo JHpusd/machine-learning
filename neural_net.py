@@ -103,6 +103,7 @@ def dRSS_dw(w,w_key):
         return dRSS_dw24(w)
     print('something went wrong')
 
+
 def gradient_desc(w, num_iterations, l_rate):
     # currently updateing edge weights at same time
     for _ in range(num_iterations):
@@ -113,9 +114,13 @@ def gradient_desc(w, num_iterations, l_rate):
 
 num_iter = [1,2,5,10,15,25,35,50,75,100,150,200,300,500,1000,2000]
 rss = []
+test = True
 for i in num_iter:
     w = {'13':1, '14':1, '23':1, '24':1, '36':1, '46':1, '56':1}
     w = gradient_desc(w, i, 0.0001)
+    if i == 2 or i == 1:
+        print(get_rss(w))
+        test = False
     rss.append(get_rss(w))
 
 plt.style.use('bmh')

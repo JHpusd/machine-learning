@@ -8,7 +8,8 @@ class Node():
         self.input_val = None
         self.output_val = None
         self.bias = False
-        self.dRSS = None
+        self.dRSS = 0
+        self.temp_dRSS = 0
         self.f = act_func
     
     def set_vals(self, input_val):
@@ -69,24 +70,21 @@ class NeuralNet():
         self.set_node_vals(x)
         return self.nodes[self.num_nodes-1].output_val
     
-    def set_node_dRSS(self, f_prime): # can't generalize f_prime
+    def set_node_dRSS(self, point, f_prime): # can't generalize f_prime
+        self.set_node_vals(point[0])
         for node in self.nodes[::-1]:
-            drss = 0
-            for point in self.points:
-                self.set_node_vals(point[0])
-                if node.num == self.num_nodes:
-                    drss += 2 * (node.output_val - point[1])
-                    continue
-                for out_node in node.info_to:
-                    edge_weight = self.get_weight(node, out_node)
-                    drss += out_node.dRSS * f_prime(out_node.input_val) * edge_weight
-            node.dRSS = drss
+            if node.num == self.num_nodes:
+                node.dRSS = 2 * (node.output_val - point[1])
+                continue
+            for out_node in node.info_to:
+                edge_weight = self.get_weight(node, out_node)
+                node.dRSS = out_node.dRSS * f_prime(out_node.input_val) * edge_weight
 
     def weight_gradients(self, f_prime):
         gradients = {key:0 for key in self.w}
         for key in self.w:
             for point in self.points:
-                self.set_node_vals(point[0])
+                self.set_node_dRSS(point, f_prime)
                 nodes = [self.get_node(char) for char in key]
                 gradients[key] += nodes[1].dRSS * f_prime(nodes[1].input_val) * nodes[0].output_val
         return gradients
@@ -94,14 +92,12 @@ class NeuralNet():
     def rss(self):
         rss = 0
         for point in self.points:
-            self.set_node_vals(point[0])
-            output = self.nodes[self.num_nodes-1].output_val
+            output = self.predict(point[0])
             rss += (output - point[1])**2
         return rss
     
     def gradient_desc(self, num_iterations, l_rate, f_prime):
         for _ in range(num_iterations):
-            self.set_node_dRSS(f_prime)
             gradients = self.weight_gradients(f_prime)
             self.w = {key:self.w[key] - l_rate*gradients[key] for key in self.w}
 '''
@@ -118,20 +114,22 @@ weights = {'13':1,'14':1,'23':1,'24':1,'36':1,'46':1,'56':1}
 act_func = lambda x: max(0,x)
 init_input = [(0,5), (2,3), (5,10)]
 bias_nums = [2, 5]
-f_prime = lambda x: x
+f_prime = lambda x: 0 if x<=0 else 1
 net = NeuralNet(6, {key:weights[key] for key in weights}, act_func, init_input, bias_nums) # the copy method cannot be trusted
 
 plt.style.use('bmh')
 plt.figure(0)
 plt.scatter([point[0] for point in init_input], [point[1] for point in init_input], label='data')
-x = [i for i in range(0,6)]
+x = [i for i in range(0,7)]
 plt.plot(x,[net.predict(i) for i in x], label='unfit regressor')
 
-num_iter = [1,2,5,10,15,25,35,50,75,100,150,200]
+num_iter = [1,2,5,10,15,25,35,50,75,100,150,200,300,500,1000,2000]
 rss = []
 for i in num_iter:
-    net = NeuralNet(6, dict(weights), act_func, init_input, bias_nums)
+    net = NeuralNet(6, {key:weights[key] for key in weights}, act_func, init_input, bias_nums)
     net.gradient_desc(i, 0.0001, f_prime)
+    if i == 1:
+        print(net.rss())
     rss.append(net.rss())
 
 plt.plot(x,[net.predict(i) for i in x], label='fit regressor')
