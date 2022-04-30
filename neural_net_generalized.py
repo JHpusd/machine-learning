@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import math, random
 
 class Node():
     def __init__(self, num, act_func):
@@ -9,7 +10,6 @@ class Node():
         self.output_val = None
         self.bias = False
         self.dRSS = 0
-        self.temp_dRSS = 0
         self.f = act_func
     
     def set_vals(self, input_val):
@@ -17,17 +17,28 @@ class Node():
         self.output_val = self.f(input_val)
 
 class NeuralNet():
-    def __init__(self, num_nodes, weights, act_func, init_in, bias_nums):
-        self.num_nodes = num_nodes
-        self.nodes = [Node(num + 1, act_func) for num in range(num_nodes)]
-        self.points = init_in
+    def __init__(self, weights, act_func, init_in, bias_nums, normalize=False):
+        nodes_str = ''
+        for key in weights:
+            nodes_str += key
+        self.num_nodes = int(max(nodes_str))
+        self.nodes = [Node(num + 1, act_func) for num in range(self.num_nodes)]
         self.w = weights
+
+        self.points = init_in
+        if normalize:
+            self.points = self.normalize_data(self.points)
 
         self.bias_nodes = [node for node in self.nodes if node.num in bias_nums]
         for node in self.bias_nodes:
             node.bias = True
-        
+
         self.connect_nodes()
+    
+    def normalize_data(self, data):
+        x = [point[0] for point in data]
+        y = [point[1] for point in data]
+        return [(10*(point[0]-min(x)) / (max(x)-min(x)), 10*(point[1]-min(y)) / (max(y)-min(y))) for point in data]
 
     def get_node(self, node_num):
         if type(node_num) == str:
@@ -73,12 +84,13 @@ class NeuralNet():
     def set_node_dRSS(self, point, f_prime): # can't generalize f_prime
         self.set_node_vals(point[0])
         for node in self.nodes[::-1]:
+            node.dRSS = 0
             if node.num == self.num_nodes:
                 node.dRSS = 2 * (node.output_val - point[1])
                 continue
             for out_node in node.info_to:
                 edge_weight = self.get_weight(node, out_node)
-                node.dRSS = out_node.dRSS * f_prime(out_node.input_val) * edge_weight
+                node.dRSS += out_node.dRSS * f_prime(out_node.input_val) * edge_weight
 
     def weight_gradients(self, f_prime):
         gradients = {key:0 for key in self.w}
@@ -100,36 +112,46 @@ class NeuralNet():
         for _ in range(num_iterations):
             gradients = self.weight_gradients(f_prime)
             self.w = {key:self.w[key] - l_rate*gradients[key] for key in self.w}
+
 '''
 weights = {'13':1,'14':1,'23':1,'24':1,'36':1,'37':1,'46':1,'47':1,'56':1,'57':1,'69':1,'79':1,'89':1}
 act_func = lambda x: 2*x
 init_input = [(3,4)]
 bias_nums = [2, 5, 8]
 net = NeuralNet(9, weights, act_func, init_input, bias_nums)
-print(net.rss())
-net.gradient_desc(10000, 0.000001, lambda x: 2)
-print(net.rss())
-'''
-weights = {'13':1,'14':1,'23':1,'24':1,'36':1,'46':1,'56':1}
+net.set_node_dRSS((3,4), lambda x: 2)
+
+n = net.nodes
+print(n[0].dRSS)
+#print(net.rss())
+#net.gradient_desc(10000, 0.000001, lambda x: 2)
+#print(net.rss())
+
+weight_keys = ['13','14','23','24','36','37','46','47','56','57','69','79','89']
+weights = {}
+for key in weight_keys:
+    weights[key] = 0.1*random.randint(-10,10)
+
 act_func = lambda x: max(0,x)
-init_input = [(0,5), (2,3), (5,10)]
-bias_nums = [2, 5]
-f_prime = lambda x: 0 if x<=0 else 1
-net = NeuralNet(6, {key:weights[key] for key in weights}, act_func, init_input, bias_nums) # the copy method cannot be trusted
+init_input = [(-5,-3),(-4,-1),(-3,1),(-2,2),(-1,-1),(1,-1),(2,1),(3,2),(4,3),(5,4),(6,2),(7,0)]
+bias_nums = [2, 5, 8]
+f_prime = lambda x: 1 if x>0 else 0
+
+net = NeuralNet(weights, act_func, init_input, bias_nums, normalize=True)
+init_input = net.normalize_data(init_input)
 
 plt.style.use('bmh')
 plt.figure(0)
 plt.scatter([point[0] for point in init_input], [point[1] for point in init_input], label='data')
-x = [i for i in range(0,7)]
+x = [i*0.01 for i in range(0,1001)]
 plt.plot(x,[net.predict(i) for i in x], label='unfit regressor')
 
 num_iter = [1,2,5,10,15,25,35,50,75,100,150,200,300,500,1000,2000]
 rss = []
 for i in num_iter:
-    net = NeuralNet(6, {key:weights[key] for key in weights}, act_func, init_input, bias_nums)
-    net.gradient_desc(i, 0.0001, f_prime)
-    if i == 1:
-        print(net.rss())
+    net = NeuralNet({key:weights[key] for key in weights}, act_func, init_input, bias_nums)
+    net.gradient_desc(i, 0.001, f_prime)
+    print(net.rss())
     rss.append(net.rss())
 
 plt.plot(x,[net.predict(i) for i in x], label='fit regressor')
@@ -141,3 +163,16 @@ plt.plot(num_iter, rss)
 plt.xlabel('num iterations')
 plt.ylabel('regressor rss')
 plt.savefig('backpropagation_iterations_vs_rss.png')
+
+# f(x) = 2x works, descends faster
+# f(x) = 0.5*x works, descends slower
+# f(x) = arctan(x) descends very slow, increased step size a lot (up to 10), min rss > 80
+# f(x) = 1/(1+e^(-x)) same as arctan, min rss > 100
+# f(x) = x^2 diverges
+# f(x) = e^x diverges
+# f(x) = e^(e^x) diverges
+# f(x) = 1/x diverges
+# f(x) = 1/(x^5) diverges
+'''
+w = ['13','14','15','23','24','25','37','38','47','48','57','58','67','68','710','810','910']
+weights = {key:1 for key in w}

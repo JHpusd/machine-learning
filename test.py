@@ -28,5 +28,6 @@ def gradient_desc(points, drrs_da, drrs_db, a, b, l_rate, steps):
 
 # have l_rate * steps = 1 to have optimal rss
 
-test = 'hello'
-print(test.split(''))
+test = ['12', '34', '56']
+weights = {key:(-1)**(int(key[0])+key[1]) * min(key[0],key[1]) / max(key[0], key[1]) for key in test}
+print(weights)
