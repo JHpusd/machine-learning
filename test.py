@@ -1,5 +1,5 @@
-import math
-
+import math, random as r
+'''
 def rss(func, points):
     rss = 0
     for point in points:
@@ -30,4 +30,7 @@ def gradient_desc(points, drrs_da, drrs_db, a, b, l_rate, steps):
 
 test = ['12', '34', '56']
 weights = {key:(-1)**(int(key[0])+key[1]) * min(key[0],key[1]) / max(key[0], key[1]) for key in test}
-print(weights)
+#print(weights)
+'''
+test = 1
+print(-test)

@@ -6,18 +6,18 @@ class SimplexAlg():
         self.complete = False
     
     def constants(self):
-        const = [row[len(row)-1] for row in self.matrix]
+        const = [row[-1] for row in self.matrix]
         const.pop()
         return const
     
     def gradients(self):
-        grad = self.matrix[len(self.matrix)-1].copy()
+        grad = self.matrix[-1].copy()
         grad.pop()
         return grad
     
     def objective_val(self):
-        last_row = self.matrix[len(self.matrix)-1]
-        return -1 * last_row[len(last_row)-1]
+        last_row = self.matrix[-1]
+        return -1 * last_row[-1]
 
     def get_col(self, i):
         return [row[i] for row in self.matrix]
