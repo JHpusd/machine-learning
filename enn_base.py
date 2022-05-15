@@ -15,7 +15,7 @@ class Node():
         self.input_val = input_val
         self.output_val = self.f(input_val)
 
-class EvolvingNeuralNet():
+class RandomNeuralNet():
     def __init__(self, node_layers, act_func, weight_range, mutat_rate, bias=True):
         # node layers gives number of non-bias nodes in each layer
         self.num_nodes = sum(node_layers)
@@ -34,6 +34,11 @@ class EvolvingNeuralNet():
         self.mutat_rate = mutat_rate
 
         self.connect_nodes()
+
+        self.rss = None # for evolving neural net algorithm
+    
+    def set_weights(self, new_weights):
+        self.w = new_weights
     
     def random_weights(self, node_layers, bias, weight_range):
         layer_rep = []
@@ -106,35 +111,8 @@ class EvolvingNeuralNet():
     def predict(self, x):
         self.set_node_vals(x)
         return self.nodes[self.num_nodes-1].output_val
-    
-    def set_node_dRSS(self, point, f_prime): # can't generalize f_prime
-        self.set_node_vals(point[0])
-        for node in self.nodes[::-1]:
-            node.dRSS = 0
-            if node.num == self.num_nodes:
-                node.dRSS = 2 * (node.output_val - point[1])
-                continue
-            for out_node in node.info_to:
-                edge_weight = self.get_weight(node, out_node)
-                node.dRSS += out_node.dRSS * f_prime(out_node.input_val) * edge_weight
 
-    def weight_gradients(self, f_prime):
-        gradients = {key:0 for key in self.w}
-        for key in self.w:
-            for point in self.points:
-                self.set_node_dRSS(point, f_prime)
-                nodes = [self.get_node(char) for char in key]
-                gradients[key] += nodes[1].dRSS * f_prime(nodes[1].input_val) * nodes[0].output_val
-        return gradients
-
-    def rss(self):
-        rss = 0
-        for point in self.points:
-            output = self.predict(point[0])
-            rss += (output - point[1])**2
-        return rss
-    
-    def gradient_desc(self, num_iterations, l_rate, f_prime):
-        for _ in range(num_iterations):
-            gradients = self.weight_gradients(f_prime)
-            self.w = {key:self.w[key] - l_rate*gradients[key] for key in self.w}
+def tanh(x):
+    top = math.exp(x) - math.exp(-x)
+    bottom = math.exp(x) + math.exp(-x)
+    return top/bottom
