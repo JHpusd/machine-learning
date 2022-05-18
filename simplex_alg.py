@@ -2,6 +2,7 @@
 class SimplexAlg():
     def __init__(self, matrix_rep):
         self.matrix = matrix_rep # editing self.matrix will edit original matrix_rep
+        self.start_vars = len(matrix_rep[0]) - 1
         self.expanded = False
         self.complete = False
     
@@ -93,4 +94,15 @@ class SimplexAlg():
                 print(f'iteration {iteration}')
             self.iterate()
             iteration += 1
+    
+    def solutions(self, solved_matrix=None):
+        if solved_matrix == None:
+            self.solve()
+            solved_matrix = self.matrix
 
+        solutions = {'objective value':self.objective_val()}
+        for i in range(self.start_vars):
+            for row in self.matrix:
+                if row[i] == 1:
+                    solutions[f'x{i+1}'] = row[-1]
+        return solutions

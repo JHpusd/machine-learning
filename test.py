@@ -33,6 +33,4 @@ test = ['12', '34', '56']
 weights = {key:(-1)**(int(key[0])+key[1]) * min(key[0],key[1]) / max(key[0], key[1]) for key in test}
 #print(weights)
 '''
-test = [1,2,3,4,5,6,7,8,9,10]
-test.sort()
-print(test)
+print(1.0==1)
