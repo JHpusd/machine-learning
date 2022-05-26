@@ -9,3 +9,8 @@ matrix_rep = [[2,1,1,14],[4,2,3,28],[2,5,5,30],[1,2,1,0]]
 sa = SimplexAlg(matrix_rep)
 
 print(sa.solutions())
+
+matrix_rep = [[-1,2,4],[3,2,14],[1,-1,3],[3,2,0]]
+sa = SimplexAlg(matrix_rep)
+
+print(sa.solutions())
