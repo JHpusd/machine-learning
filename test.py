@@ -34,4 +34,4 @@ weights = {key:(-1)**(int(key[0])+key[1]) * min(key[0],key[1]) / max(key[0], key
 #print(weights)
 '''
 test = [1,0,0,0]
-print(test[:1])
+print(all(x>0 for x in test))

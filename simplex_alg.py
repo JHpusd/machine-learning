@@ -97,7 +97,7 @@ class SimplexAlg():
     
     def zero_before(self, row, i):
         before = row[:i]
-        
+        return all(x==0 for x in before)
     
     def solutions(self, solved_matrix=None):
         if solved_matrix == None:
@@ -107,7 +107,7 @@ class SimplexAlg():
         solutions = {'objective value':self.objective_val()}
         for i in range(self.start_vars):
             for row in self.matrix[:-1]:
-                if row[i] == 1 and :
+                if row[i] == 1 and self.zero_before(row, i):
                     solutions[f'x{i+1}'] = row[-1]
                     break
         return solutions
