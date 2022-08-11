@@ -33,5 +33,6 @@ test = ['12', '34', '56']
 weights = {key:(-1)**(int(key[0])+key[1]) * min(key[0],key[1]) / max(key[0], key[1]) for key in test}
 #print(weights)
 '''
-test = [1,0,0,0]
-print(all(x>0 for x in test))
+test = [1,2,3,4,5]
+test.sort(reverse=True)
+print(test[-1])
